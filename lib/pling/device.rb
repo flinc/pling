@@ -1,8 +1,32 @@
 module Pling
   class Device
-
-    attr_reader :identifier, :type
-
+    
+    ##
+    # The device identifier
+    #
+    # @overload identifier
+    # @overload identifier=(identifier)
+    #   @param [#to_s] identifier
+    attr_reader :identifier
+    
+    def identifier=(identifier)
+      identifier &&= identifier.to_s
+      @identifier = identifier
+    end
+    
+    ##
+    # The device type
+    #
+    # @overload type
+    # @overload type=(type)
+    #    @param [#to_sym] type
+    attr_reader :type
+    
+    def type=(type)
+      type &&= type.to_sym
+      @type = type
+    end
+    
     ##
     # Creates a new Pling::Device instance with the given identifier and type
     #
@@ -14,24 +38,6 @@ module Pling
         method = "#{key}="
         send(method, value) if respond_to?(method)
       end
-    end
-
-    ##
-    # Sets the identifier to the given value.
-    #
-    # @param [#to_s] identifier
-    def identifier=(identifier)
-      identifier &&= identifier.to_s
-      @identifier = identifier
-    end
-
-    ##
-    # Sets the type to the given value.
-    #
-    # @param [#to_sym] type
-    def type=(type)
-      type &&= type.to_sym
-      @type = type
     end
 
     ##
