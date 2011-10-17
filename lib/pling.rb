@@ -4,6 +4,7 @@ module Pling
 
   autoload :Device,  'pling/device'
   autoload :Message, 'pling/message'
+  autoload :Gateway, 'pling/gateway'
 
   @gateways = []
 
