@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Pling::Device do
 
   context 'when created with no arguments' do
-    it 'should require an argument' do
+    it 'should not require an argument' do
       expect { Pling::Device.new() }.to_not raise_error ArgumentError
     end
   
