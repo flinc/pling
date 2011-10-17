@@ -16,9 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_runtime_dependency "faraday", "~> 0.7"
 
   s.add_development_dependency "rspec", "~> 2.7"
   s.add_development_dependency "yard", ">= 0.7"
