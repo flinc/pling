@@ -4,3 +4,4 @@ source 'http://rubygems.org'
 gemspec
 
 gem 'guard'
+gem 'rdiscount', ">= 1.6.8"
