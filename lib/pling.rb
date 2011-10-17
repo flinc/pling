@@ -2,6 +2,9 @@ require "pling/version"
 
 module Pling
 
+  autoload :Device,  'pling/device'
+  autoload :Message, 'pling/message'
+
   @gateways = []
 
   class << self
