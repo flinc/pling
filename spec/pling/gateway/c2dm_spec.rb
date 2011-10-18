@@ -3,11 +3,11 @@ require 'spec_helper'
 describe Pling::Gateway::C2DM do
 
   let(:valid_options) do
-    { :username => 'someone@gmail.com', :password => 'random', :source => 'some-source' }
+    { :email => 'someone@gmail.com', :password => 'random', :source => 'some-source' }
   end
 
   context 'when created with an invalid options' do
-    [:username, :password, :source].each do |attribute|
+    [:email, :password, :source].each do |attribute|
       it 'should raise an error when #{attribute} is missing' do
         options = valid_options
         options.delete(attribute)

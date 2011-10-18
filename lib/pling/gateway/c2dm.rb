@@ -4,7 +4,7 @@ module Pling
 
       def initialize(options)
         setup_options(options)
-        require_options([:username, :password, :source])
+        require_options([:email, :password, :source])
       end
 
       def deliver(message, device)
