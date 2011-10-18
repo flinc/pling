@@ -2,9 +2,8 @@ module Pling
   module Gateway
     class C2DM < Pling::Gateway::Base
 
-      def initialize(options)
-        setup_options(options)
-        require_options([:email, :password, :source])
+      def initialize(configuration)
+        setup_configuration(configuration, :require => [:email, :password, :source])
       end
 
       def deliver(message, device)

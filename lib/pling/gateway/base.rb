@@ -4,26 +4,29 @@ module Pling
 
       protected
 
-        def options
-          @options ||= default_options
+        def configuration
+          @configuration ||= default_configuration
         end
 
-        def default_options
+        def default_configuration
           {}
         end
 
-        def setup_options(opts = {})
-          opts.each_pair do |key, value|
-            options[key.to_sym] = value
+        def setup_configuration(config = {}, opts = {})
+          config.each_pair do |key, value|
+            configuration[key.to_sym] = value
           end
+
+          require_configuration(opts[:require] || [])
         end
 
-        def require_options(keys, message = nil)
+      private
+
+        def require_configuration(keys, message = nil)
           [keys].flatten.each do |key|
-            raise(ArgumentError, message || "Option #{key} is missing") unless options.key?(key.to_sym)
+            raise(ArgumentError, message || "Option #{key} is missing") unless configuration.key?(key.to_sym)
           end
         end
-        alias :require_option :require_options
     end
   end
 end

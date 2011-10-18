@@ -2,28 +2,28 @@ require 'spec_helper'
 
 describe Pling::Gateway::C2DM do
 
-  let(:valid_options) do
+  let(:valid_configuration) do
     { :email => 'someone@gmail.com', :password => 'random', :source => 'some-source' }
   end
 
-  context 'when created with an invalid options' do
+  context 'when created with an invalid configuration' do
     [:email, :password, :source].each do |attribute|
       it 'should raise an error when #{attribute} is missing' do
-        options = valid_options
-        options.delete(attribute)
-        expect { Pling::Gateway::C2DM.new(options) }.to raise_error(ArgumentError, /#{attribute} is missing/)
+        configuration = valid_configuration
+        configuration.delete(attribute)
+        expect { Pling::Gateway::C2DM.new(configuration) }.to raise_error(ArgumentError, /#{attribute} is missing/)
       end
     end
   end
 
-  context 'when created with valid options' do
+  context 'when created with valid configuration' do
     it 'should not raise an error' do
-      expect { Pling::Gateway::C2DM.new(valid_options) }.to_not raise_error
+      expect { Pling::Gateway::C2DM.new(valid_configuration) }.to_not raise_error
     end
   end
 
   describe '#deliver' do
-    subject { Pling::Gateway::C2DM.new(valid_options) }
+    subject { Pling::Gateway::C2DM.new(valid_configuration) }
 
     let(:message) { mock(:to_pling_message => Pling::Message.new) }
     let(:device) { mock(:to_pling_device => Pling::Device.new) }
