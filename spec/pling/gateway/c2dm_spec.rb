@@ -32,8 +32,8 @@ describe Pling::Gateway::C2DM do
     end
 
     it 'should try to authenticate' do
-      connection_mock.should_receive(:post)
-        .with('https://www.google.com/accounts/ClientLogin', {
+      connection_mock.should_receive(:post).
+        with('https://www.google.com/accounts/ClientLogin', {
           :accountType => 'HOSTED_OR_GOOGLE',
           :service => 'ac2dm',
           :Email => valid_configuration[:email],
