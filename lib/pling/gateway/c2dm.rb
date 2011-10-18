@@ -3,10 +3,8 @@ module Pling
     class C2DM < Pling::Gateway::Base
 
       def initialize(options)
-        @options = {}
-        [:username, :password, :source].each do |key|
-          @options[key] = options[key] || options[key.to_s] or raise ArgumentError, "#{key} is missing"
-        end
+        setup_options(options)
+        require_options([:username, :password, :source])
       end
 
       def deliver(message, device)
