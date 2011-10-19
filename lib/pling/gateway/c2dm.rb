@@ -33,7 +33,8 @@ module Pling
 
         response = connection.post(configuration[:push_url], {
           :registration_id => device.identifier,
-          :"data.content" => message.content
+          :"data.content" => message.content,
+          :collapse_key => message.content.hash
         }, { :Authorization => "GoogleLogin auth=#{@token}"})
 
         raise(Pling::DeliveryFailed, "C2DM Delivery failed: [#{response.status}] #{response.body}") unless response.success?

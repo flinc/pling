@@ -122,7 +122,8 @@ describe Pling::Gateway::C2DM do
     let(:valid_push_params) do
       {
         :registration_id => device.identifier,
-        :'data.content' => message.content
+        :'data.content' => message.content,
+        :collapse_key => message.content.hash
       }
     end
 
