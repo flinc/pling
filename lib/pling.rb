@@ -24,6 +24,12 @@ module Pling
     # @return [Array] list of available gateways
     attr_accessor :gateways
 
+
+    ##
+    # Allows configuration of Pling by passing a config object to the given block
+    #
+    # @yield [config]
+    # @raise [ArgumentError] Raised when no block is given
     def configure
       raise ArgumentError, 'No block given for Pling.configure' unless block_given?
       yield self
