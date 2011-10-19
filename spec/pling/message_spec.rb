@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Pling::Message do
-  
+
   context 'when created with no arguments' do
     it 'should not require an argument' do
       expect { Pling::Message.new() }.to_not raise_error ArgumentError

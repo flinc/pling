@@ -35,7 +35,7 @@ To integrate Pling in your application you have to implement a `to_pling` method
 
 ### Devices
 
-Devices store an identifier and a type. 
+Devices store an identifier and a type.
 
   Example:
 
@@ -71,14 +71,14 @@ The Android C2DM gateway allows pushing of messages to android handsets using Go
   Example:
 
     Pling::Gateway::C2DM.new({
-      :email => 'your-email@gmail.com',    # Your google account's email address (Required)
+      :email    => 'your-email@gmail.com', # Your google account's email address (Required)
       :password => 'your-password',        # Your google account's password (Required)
-      :source => 'your-app-name',          # Your applications source identifier (Required)
+      :source   => 'your-app-name',        # Your applications source identifier (Required)
 
       :authentication_url => 'http://...', # The authentication url to use (Optional, Default: C2DM default authentication url)
-      :push_url => 'http://...',           # The push url to use (Optional, Default: C2DM default authentication url)
-      :adapter => :net_http,               # The Faraday adapter you want to use (Optional, Default: :net_http)
-      :connection => {}                    # Options you want to pass to Faraday (Optional, Default: {})
+      :push_url           => 'http://...', # The push url to use (Optional, Default: C2DM default authentication url)
+      :adapter            => :net_http,    # The Faraday adapter you want to use (Optional, Default: :net_http)
+      :connection         => {}            # Options you want to pass to Faraday (Optional, Default: {})
     })
 
 ## Build Status

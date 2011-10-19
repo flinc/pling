@@ -27,7 +27,7 @@ module Pling
           (args.last || {}).merge(:content => param)
         when Hash
           param
-        else 
+        else
           {}
       end
 

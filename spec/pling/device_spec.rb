@@ -4,12 +4,12 @@ describe Pling::Device do
 
   context 'when created with no arguments' do
     it 'should not require an argument' do
-      expect { Pling::Device.new() }.to_not raise_error ArgumentError
+      expect { Pling::Device.new }.to_not raise_error ArgumentError
     end
-  
-    specify { Pling::Device.new().should_not be_valid }
+
+    specify { Pling::Device.new.should_not be_valid }
   end
-  
+
   context 'when created with an empty hash' do
     it 'should accept a hash of attributes' do
       expect { Pling::Device.new({}) }.to_not raise_error

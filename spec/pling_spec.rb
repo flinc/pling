@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Pling do
-  
+
   subject { Pling }
 
   it { should respond_to(:configure) }
