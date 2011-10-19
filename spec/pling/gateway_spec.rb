@@ -36,8 +36,8 @@ describe Pling::Gateway do
     end
 
     it 'should raise an Pling::NoGatewayFound error if no gateway was found' do
-      device.stub(:type => :random)
-      expect { subject.discover(device) }.to raise_error Pling::NoGatewayFound
+      device.type = :random
+      expect { subject.discover(device) }.to raise_error Pling::NoGatewayFound, /Could not find a gateway for Pling::Device with type :random/
     end
   end
 
