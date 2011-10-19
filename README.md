@@ -1,4 +1,4 @@
-# Pling ![Travis build status of pling](http://travis-ci.org/flinc/pling.png)
+# Pling [![Travis build status of pling](http://travis-ci.org/flinc/pling.png)](http://travis-ci.org/flinc/pling)
 
 Pling is a notification framework that supports multiple gateways.
 
