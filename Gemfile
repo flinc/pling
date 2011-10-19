@@ -4,4 +4,6 @@ source 'http://rubygems.org'
 gemspec
 
 gem 'guard'
+gem 'guard-rspec'
+gem 'growl_notify'
 gem 'rdiscount', ">= 1.6.8", :platform => :ruby
