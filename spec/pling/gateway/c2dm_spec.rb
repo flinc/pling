@@ -64,13 +64,13 @@ describe Pling::Gateway::C2DM do
       response_mock.stub(:success?).and_return(false)
       response_mock.stub(:body).and_return('Error=BadAuthentication')
 
-      expect { Pling::Gateway::C2DM.new(valid_configuration) }.to raise_error(/Authentication failed: Error=BadAuthentication/)
+      expect { Pling::Gateway::C2DM.new(valid_configuration) }.to raise_error(Pling::AuthenticationFailed, /Authentication failed: Error=BadAuthentication/)
     end
 
     it 'should raise an error if it could not extract a token from the response' do
       response_mock.stub(:body).and_return('SOMERANDOMBODY')
 
-      expect { Pling::Gateway::C2DM.new(valid_configuration) }.to raise_error(/Token extraction failed/)
+      expect { Pling::Gateway::C2DM.new(valid_configuration) }.to raise_error(Pling::AuthenticationFailed, /Token extraction failed/)
     end
   end
 

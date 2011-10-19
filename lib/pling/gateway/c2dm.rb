@@ -18,7 +18,7 @@ module Pling
     #     :adapter            => :net_http,    # The Faraday adapter you want to use (Optional, Default: :net_http)
     #     :connection         => {}            # Options you want to pass to Faraday (Optional, Default: {})
     #   })
-    class C2DM < Pling::Gateway::Base
+    class C2DM < Base
 
       attr_reader :token
 
@@ -45,7 +45,7 @@ module Pling
             :source      => configuration[:source]
           })
 
-          raise "C2DM Authentication failed: #{response.body}" unless response.success?
+          raise(Pling::AuthenticationFailed, "C2DM Authentication failed: #{response.body}") unless response.success?
 
           @token = extract_token(response.body)
         end
@@ -68,7 +68,7 @@ module Pling
 
         def extract_token(body)
           matches = body.match(/^Auth=(.+)$/)
-          matches && matches[1] or raise "C2DM Token extraction failed"
+          matches ? matches[1] : raise(Pling::AuthenticationFailed, "C2DM Token extraction failed")
         end
     end
   end

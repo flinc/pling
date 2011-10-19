@@ -32,3 +32,11 @@ describe Pling do
   end
 
 end
+
+describe Pling::AuthenticationFailed do
+  it { should be_kind_of Pling::Error }
+end
+
+describe Pling::DeliveryFailed do
+  it { should be_kind_of Pling::Error }
+end

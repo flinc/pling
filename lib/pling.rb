@@ -8,6 +8,15 @@ module Pling
 
   @gateways = []
 
+  class Error < StandardError
+  end
+
+  class AuthenticationFailed < Error
+  end
+
+  class DeliveryFailed < Error
+  end
+
   class << self
     ##
     # Stores the list of available gateway instances
