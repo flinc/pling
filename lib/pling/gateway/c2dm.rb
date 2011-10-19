@@ -37,7 +37,9 @@ module Pling
           :collapse_key => message.content.hash
         }, { :Authorization => "GoogleLogin auth=#{@token}"})
 
-        raise(Pling::DeliveryFailed, "C2DM Delivery failed: [#{response.status}] #{response.body}") unless response.success?
+        if !response.success? || response.body =~ /^Error=(.+)$/
+          raise(Pling::DeliveryFailed, "C2DM Delivery failed: [#{response.status}] #{response.body}")
+        end
       end
 
       private

@@ -168,5 +168,15 @@ describe Pling::Gateway::C2DM do
 
       expect { subject.deliver(message, device) }.to raise_error Pling::DeliveryFailed, /Something went wrong/
     end
+
+    it 'should raise a Pling::DeliveryFailed exception if the response body contained an error' do
+      connection_mock.should_receive(:post).
+        with('https://android.apis.google.com/c2dm/send', valid_push_params, valid_push_headers).
+        and_return(push_response_mock)
+
+      push_response_mock.stub(:status => 200, :success? => true, :body => "Error=SomeError")
+
+      expect { subject.deliver(message, device) }.to raise_error Pling::DeliveryFailed, /Error=SomeError/
+    end
   end
 end
