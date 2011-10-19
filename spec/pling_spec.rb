@@ -40,3 +40,7 @@ end
 describe Pling::DeliveryFailed do
   it { should be_kind_of Pling::Error }
 end
+
+describe Pling::NoGatewayFound do
+  it { should be_kind_of Pling::Error }
+end

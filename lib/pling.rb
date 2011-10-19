@@ -8,14 +8,10 @@ module Pling
 
   @gateways = []
 
-  class Error < StandardError
-  end
-
-  class AuthenticationFailed < Error
-  end
-
-  class DeliveryFailed < Error
-  end
+  class Error < StandardError; end
+  class AuthenticationFailed < Error; end
+  class DeliveryFailed < Error; end
+  class NoGatewayFound < Error; end
 
   class << self
     ##

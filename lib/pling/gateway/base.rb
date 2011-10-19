@@ -2,6 +2,20 @@ module Pling
   module Gateway
     class Base
 
+      def handles?(device)
+        self.class.handled_types.include?(device.type)
+      end
+
+      class << self
+        def handles(*types)
+          @handled_types = [types].flatten.map { |t| t.to_sym }
+        end
+
+        def handled_types
+          @handled_types ||= []
+        end
+      end
+
       protected
 
         def configuration
