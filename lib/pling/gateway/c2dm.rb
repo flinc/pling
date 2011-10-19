@@ -30,6 +30,13 @@ module Pling
       def deliver(message, device)
         message = Pling._convert(message, :message)
         device  = Pling._convert(device,  :device)
+
+        response = connection.post(configuration[:push_url], {
+          :registration_id => device.identifier,
+          :"data.content" => message.content
+        }, { :Authorization => "GoogleLogin auth=#{@token}"})
+
+        raise(Pling::DeliveryFailed, "C2DM Delivery failed: [#{response.status}] #{response.body}") unless response.success?
       end
 
       private
@@ -43,7 +50,7 @@ module Pling
             :source      => configuration[:source]
           })
 
-          raise(Pling::AuthenticationFailed, "C2DM Authentication failed: #{response.body}") unless response.success?
+          raise(Pling::AuthenticationFailed, "C2DM Authentication failed: [#{response.status}] #{response.body}") unless response.success?
 
           @token = extract_token(response.body)
         end
@@ -58,8 +65,9 @@ module Pling
         end
 
         def connection
-          @connection ||= Faraday.new(configuration[:authentication_url]) do |builder|
+          @connection ||= Faraday.new(configuration[:connection]) do |builder|
             builder.use Faraday::Request::UrlEncoded
+            builder.use Faraday::Response::Logger if configuration[:debug]
             builder.adapter(configuration[:adapter])
           end
         end
