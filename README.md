@@ -17,9 +17,9 @@ Add this line to your `Gemfile`:
 
     Pling.configure do |config|
       config.gateways = [
-        Pling::Gateways::C2DM.new(:options => 'here'),
-        Pling::Gateways::IPhone.new(:options => 'here'),
-        Pling::Gateways::Email.new(:options => 'here')
+        Pling::Gateway::C2DM.new(:email => 'your-email@gmail.com', :password => 'your-password', :source => 'your-app-name'),
+        Pling::Gateway::Iphone.new(:options => 'here'),
+        Pling::Gatewas::Email.new(:options => 'here')
       ]
     end
 
@@ -64,26 +64,43 @@ Currently there are these gateways available:
 * SMS via Mobilant (See `pling-mobilant` gem, not yet implemented)
 * E-Mail (See `pling-actionmailer` gem, not yet implemented)
 
+#### Android C2DM
+
+The Android C2DM gateway allows pushing of messages to android handsets using Google's C2DM service.
+
+  Example:
+
+    Pling::Gateway::C2DM.new({
+      :email => 'your-email@gmail.com',    # Your google account's email address (Required)
+      :password => 'your-password',        # Your google account's password (Required)
+      :source => 'your-app-name',          # Your applications source identifier (Required)
+
+      :authentication_url => 'http://...', # The authentication url to use (Optional, Default: C2DM default authentication url)
+      :push_url => 'http://...',           # The push url to use (Optional, Default: C2DM default authentication url)
+      :adapter => :net_http,               # The Faraday adapter you want to use (Optional, Default: :net_http)
+      :connection => {}                    # Options you want to pass to Faraday (Optional, Default: {})
+    })
+
 ## Build Status
 
-Pling is on [Travis](http://travis-ci.org/flinc/pling) running the specs on Ruby 1.8.7, Ruby 1.9.2 and Ruby Enterprise Edition.
+Pling is on [Travis](http://travis-ci.org/flinc/pling) running the specs on Ruby 1.8.7, Ruby Enterprise Edition, Ruby 1.9.2, Ruby HEAD, JRuby, Rubinius and Rubinius 2.
 
 
 ## Known issues
 
-See https://github.com/flinc/pling/issues
+See [the issue tracker on GitHub](https://github.com/flinc/pling/issues).
 
 
 ## Repository
 
-See https://github.com/flinc/pling and feel free to fork it!
+See [the repository on GitHub](https://github.com/flinc/pling) and feel free to fork it!
 
 
 ## Contributors
 
-See a list of all contributors at https://github.com/flinc/pling/contributors. Thanks a lot everyone!
+See a list of all contributors on [GitHub](https://github.com/flinc/pling/contributors). Thanks a lot everyone!
 
 
 ## Copyright
 
-Copyright (c) 2010-2011 flinc AG. See LICENSE for details.
+Copyright (c) 2010-2011 [flinc AG](https://flinc.org/). See LICENSE for details.
