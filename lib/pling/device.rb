@@ -53,8 +53,7 @@ module Pling
     #
     # @param [#to_pling_message] message
     def deliver(message)
-      raise "The given object #{message.inspect} does not implement #to_pling_message" unless message.respond_to?(:to_pling_message)
-      message &&= message.to_pling_message
+      message = Pling._convert(message, :message)
     end
 
     ##
