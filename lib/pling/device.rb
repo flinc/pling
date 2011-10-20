@@ -52,10 +52,10 @@ module Pling
     # Delivers the given message using an appropriate (or the given) gateway.
     #
     # @param [#to_pling_message] message
-    # @params [Hash] options
+    # @param [Hash] options
     # @option options [Pling::Gateway::Base] :gateway
     def deliver(message, options = {})
-      gateway = options[:gateway] || options['gateway'] ||  Pling::Gateway.discover(self)
+      gateway = options[:gateway] || options['gateway'] || Pling::Gateway.discover(self)
       gateway.deliver(message, self)
     end
 
