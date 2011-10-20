@@ -53,7 +53,7 @@ module Pling
     #
     # @param [#to_pling_message] message
     def deliver(message)
-      message = Pling._convert(message, :message)
+      Pling::Gateway.discover(self).deliver(message, self)
     end
 
     ##

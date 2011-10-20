@@ -58,13 +58,17 @@ describe Pling::Device do
   describe '#deliver' do
     subject { Pling::Device.new(:identifier => 'XXXX', :type => 'android') }
 
+    let(:message) { stub() }
+    let(:gateway) { stub(:deliver => true) }
+
+    before { Pling::Gateway.stub(:discover => gateway) }
+
     it 'should require a message as parameter' do
       expect { subject.deliver }.to raise_error ArgumentError
     end
 
-    it 'should call #to_pling_message on the given message' do
-      message = mock()
-      message.should_receive(:to_pling_message).and_return(Pling::Message.new)
+    it 'should deliver the given message to an gateway' do
+      gateway.should_receive(:deliver).with(message, subject)
       subject.deliver(message)
     end
   end
