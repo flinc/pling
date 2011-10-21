@@ -74,11 +74,21 @@ describe Pling::Gateway::APN do
     end
 
     it 'should try to deliver the given message' do
-      packet = "\x00\x00 \xDE\xF2\xCE-\xE7\xD2\xF2\xEB\x00" +
-               "@{\"aps\":{\"alert\":\"Hello from Pling\"," +
-               "\"badge\":0,\"sound\":\"default\"}}"
+      expected_header  = "\x00\x00 \xDE\xF2\xCE-\xE7\xD2\xF2\xEB\x00"
+      expected_payload = {
+        'aps' => {
+          'alert' => 'Hello from Pling',
+          'badge' => 0,
+          'sound' => 'default'
+        }
+      }
 
-      ssl_socket.should_receive(:write).with(packet)
+      ssl_socket.stub(:write) do |packet|
+        header, payload = packet.split('@')
+        header.should eq(expected_header)
+        JSON.parse(payload).should eq(expected_payload)
+      end
+
       subject.deliver(message, device)
     end
   end
