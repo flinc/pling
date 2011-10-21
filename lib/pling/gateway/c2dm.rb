@@ -5,6 +5,8 @@ module Pling
     ##
     # Pling gateway to communicate with Google's Android C2DM service.
     #
+    # The gateway is implemented using Faraday. It defaults to Faraday's :net_http adapter.
+    # You can customize the adapter by passing the :adapter configuration.
     #
     # Example:
     #
@@ -22,11 +24,29 @@ module Pling
 
       attr_reader :token
 
+      ##
+      # Initializes a new gateway to Apple's Push Notification service
+      #
+      # @param [Hash] configuration
+      # @option configuration [String] :email Your C2DM enabled Google account (Required)
+      # @option configuration [String] :password Your Google account's password (Required)
+      # @option configuration [String] :source Your applications identifier (Required)
+      # @option configuration [String] :authentication_url The URL to authenticate with (Optional)
+      # @option configuration [String] :push_url The URL to push to (Optional)
+      # @option configuration [Symbol] :adapter The Faraday adapter to use (Optional)
+      # @option configuration [String] :connection Any options for Faraday (Optional)
+      # @raise Pling::AuthenticationFailed
       def initialize(configuration)
         setup_configuration(configuration, :require => [:email, :password, :source])
         authenticate!
       end
 
+      ##
+      # Sends the given message to the given device.
+      #
+      # @param [#to_pling_message] message
+      # @param [#to_pling_device] device
+      # @raise Pling::DeliveryFailed
       def deliver(message, device)
         message = Pling._convert(message, :message)
         device  = Pling._convert(device,  :device)
