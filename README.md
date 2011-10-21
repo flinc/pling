@@ -18,7 +18,7 @@ Add this line to your `Gemfile`:
     Pling.configure do |config|
       config.gateways = [
         Pling::Gateway::C2DM.new(:email => 'your-email@gmail.com', :password => 'your-password', :source => 'your-app-name'),
-        Pling::Gateway::Iphone.new(:options => 'here'),
+        Pling::Gateway::APN.new(:certificate => '/path/to/certificate.pem')
         Pling::Gatewas::Email.new(:options => 'here')
       ]
     end
@@ -59,27 +59,12 @@ The Gateway delivers the message in the required format to the service provider.
 
 Currently there are these gateways available:
 
-* Android C2DM (not yet implemented)
-* iPhone Push (not yet implemented)
+* [Android C2DM](http://rdoc.info/github/flinc/pling/master/Pling/Gateway/C2DM)
+* [Apple Push Notification](http://rdoc.info/github/flinc/pling/master/Pling/Gateway/APN)
 * SMS via Mobilant (See `pling-mobilant` gem, not yet implemented)
 * E-Mail (See `pling-actionmailer` gem, not yet implemented)
 
-#### Android C2DM
-
-The Android C2DM gateway allows pushing of messages to android handsets using Google's C2DM service.
-
-  Example:
-
-    Pling::Gateway::C2DM.new({
-      :email    => 'your-email@gmail.com', # Your google account's email address (Required)
-      :password => 'your-password',        # Your google account's password (Required)
-      :source   => 'your-app-name',        # Your applications source identifier (Required)
-
-      :authentication_url => 'http://...', # The authentication url to use (Optional, Default: C2DM default authentication url)
-      :push_url           => 'http://...', # The push url to use (Optional, Default: C2DM default authentication url)
-      :adapter            => :net_http,    # The Faraday adapter you want to use (Optional, Default: :net_http)
-      :connection         => {}            # Options you want to pass to Faraday (Optional, Default: {})
-    })
+See the [API documentation](http://rdoc.info/github/flinc/pling) for details on the available gateways.
 
 ## Build Status
 
