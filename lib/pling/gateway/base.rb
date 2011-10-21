@@ -38,7 +38,7 @@ module Pling
 
         def require_configuration(keys, message = nil)
           [keys].flatten.each do |key|
-            raise(ArgumentError, message || "Option #{key} is missing") unless configuration.key?(key.to_sym)
+            raise(ArgumentError, message || "Option :#{key} is missing") unless configuration.key?(key.to_sym)
           end
         end
     end

@@ -30,10 +30,10 @@ describe Pling::Gateway::C2DM do
 
   context 'when created with an invalid configuration' do
     [:email, :password, :source].each do |attribute|
-      it "should raise an error when #{attribute} is missing" do
+      it "should raise an error when :#{attribute} is missing" do
         configuration = valid_configuration
         configuration.delete(attribute)
-        expect { Pling::Gateway::C2DM.new(configuration) }.to raise_error(ArgumentError, /#{attribute} is missing/)
+        expect { Pling::Gateway::C2DM.new(configuration) }.to raise_error(ArgumentError, /:#{attribute} is missing/)
       end
     end
   end
