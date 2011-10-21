@@ -2,6 +2,7 @@ module Pling
   module Gateway
     autoload :Base, 'pling/gateway/base'
     autoload :C2DM, 'pling/gateway/c2dm'
+    autoload :APN,  'pling/gateway/apn'
 
     class << self
       def discover(device)
