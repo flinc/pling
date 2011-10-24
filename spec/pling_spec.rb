@@ -59,6 +59,24 @@ describe Pling do
       Pling.stub(:adapter).and_return(adapter)
     end
 
+    it 'should raise an error if no message is given' do
+      expect { Pling.deliver(nil, device) }.to raise_error
+    end
+
+    it 'should raise an error the device is given' do
+      expect { Pling.deliver(message, nil) }.to raise_error
+    end
+
+    it 'should call #to_pling_message on the given message' do
+      message.should_receive(:to_pling_message).and_return(message)
+      Pling.deliver(message, device)
+    end
+
+    it 'should call #to_pling_device on the given device' do
+      device.should_receive(:to_pling_device).and_return(device)
+      Pling.deliver(message, device)
+    end
+
     it 'should call the adapter' do
       adapter.should_receive(:deliver).with(message, device)
       Pling.deliver(message, device)
