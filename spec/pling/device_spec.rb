@@ -71,11 +71,5 @@ describe Pling::Device do
       gateway.should_receive(:deliver).with(message, subject)
       subject.deliver(message)
     end
-
-    it 'should deliver the given message to the given gateway' do
-      other_gateway = stub()
-      other_gateway.should_receive(:deliver).with(message, subject)
-      subject.deliver(message, :gateway => other_gateway)
-    end
   end
 end
