@@ -31,6 +31,53 @@ describe Pling do
     end
   end
 
+  it { should respond_to(:middlewares) }
+  it { should respond_to(:middlewares=) }
+
+  describe '.middlewares' do
+    it 'should default to an empty array' do
+      subject.middlewares.should eq([])
+    end
+  end
+
+  it { should respond_to(:adapter) }
+  it { should respond_to(:adapter=) }
+
+  describe '.adapter' do
+    it 'should default to Pling::Adapter::Base' do
+      subject.adapter.class.should eq(Pling::Adapter::Base)
+    end
+  end
+
+  describe '.deliver' do
+
+    let(:message) { Pling::Message.new }
+    let(:device)  { Pling::Device.new  }
+    let(:adapter) { mock(:deliver => true) }
+
+    before do
+      Pling.stub(:adapter).and_return(adapter)
+    end
+
+    it 'should call the adapter' do
+      adapter.should_receive(:deliver).with(message, device)
+      Pling.deliver(message, device)
+    end
+
+    it 'should call each middleware in the given order' do
+      first_middleware = double(Pling::Middleware::Base)
+      first_middleware.should_receive(:deliver).
+        with(message, device).and_yield(message, device)
+
+      second_middleware = double(Pling::Middleware::Base)
+      second_middleware.should_receive(:deliver).
+        with(message, device)
+
+      Pling.stub(:middlewares).and_return([first_middleware, second_middleware])
+
+      Pling.deliver(message, device)
+    end
+  end
 end
 
 describe Pling::AuthenticationFailed do

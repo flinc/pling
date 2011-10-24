@@ -2,11 +2,16 @@ require "pling/version"
 
 module Pling
 
-  autoload :Device,  'pling/device'
-  autoload :Message, 'pling/message'
-  autoload :Gateway, 'pling/gateway'
+  autoload :Device,       'pling/device'
+  autoload :Message,      'pling/message'
+  autoload :Gateway,      'pling/gateway'
+  autoload :Middleware,   'pling/middleware'
+  autoload :Adapter,      'pling/adapter'
+  autoload :Configurable, 'pling/configurable'
 
   @gateways = []
+  @middlewares = []
+  @adapter = Pling::Adapter::Base.new
 
   class Error < StandardError; end
   class AuthenticationFailed < Error; end
@@ -20,6 +25,17 @@ module Pling
     # @return [Array] list of available gateways
     attr_accessor :gateways
 
+    ##
+    # Stores the list of avaiable middleware instances
+    #
+    # @return [Array] list of available middleware
+    attr_accessor :middlewares
+
+    ##
+    # Stores the adapter
+    #
+    # @return [Pling::Adapter]
+    attr_accessor :adapter
 
     ##
     # Allows configuration of Pling by passing a config object to the given block
@@ -31,6 +47,17 @@ module Pling
       yield self
     end
 
+    ##
+    # Delivers the given message to the given device using the given stack.
+    #
+    # @param message [#to_pling_message]
+    # @param device [#to_pling_device]
+    # @param stack [Array] The stack to use (Default: middlewares + [adapter])
+    def deliver(message, device, stack = middlewares + [adapter])
+      stack.shift.deliver(message, device) do |m, d|
+        deliver(m, d, stack)
+      end
+    end
 
     ##
     # [INTERNAL METHOD] Converts the given object to the given pling type
