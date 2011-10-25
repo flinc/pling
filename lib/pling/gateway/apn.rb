@@ -44,7 +44,7 @@ module Pling
 
         data = {
           :aps => {
-            :alert => message.content,
+            :alert => message.body,
             :badge => 0,
             :sound => :default
           }

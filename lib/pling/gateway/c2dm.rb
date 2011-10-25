@@ -53,8 +53,8 @@ module Pling
 
         response = connection.post(configuration[:push_url], {
           :registration_id => device.identifier,
-          :"data.content" => message.content,
-          :collapse_key => message.content.hash
+          :"data.body" => message.body,
+          :collapse_key => message.body.hash
         }, { :Authorization => "GoogleLogin auth=#{@token}"})
 
         if !response.success? || response.body =~ /^Error=(.+)$/

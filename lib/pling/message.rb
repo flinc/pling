@@ -1,30 +1,30 @@
 module Pling
   class Message
     ##
-    # The message content
+    # The message body
     #
-    # @overload content
-    # @overload content=(content)
-    #   @param [#to_s] content
-    attr_reader :content
+    # @overload body
+    # @overload body=(body)
+    #   @param [#to_s] body
+    attr_reader :body
 
-    def content=(content)
-      content &&= content.to_s
-      @content = content
+    def body=(body)
+      body &&= body.to_s
+      @body = body
     end
 
     ##
-    # Creates a new Pling::Message instance with the given content
+    # Creates a new Pling::Message instance with the given body
     #
-    # @overload initialize(content)
-    #   @param [#to_s] content
+    # @overload initialize(body)
+    #   @param [#to_s] body
     # @overload initialize(attributes)
     #   @param [Hash] attributes
-    #   @option attributes [#to_s] :content
+    #   @option attributes [#to_s] :body
     def initialize(*args)
       attributes = case param = args.shift
         when String
-          (args.last || {}).merge(:content => param)
+          (args.last || {}).merge(:body => param)
         when Hash
           param
         else
@@ -38,11 +38,11 @@ module Pling
     end
 
     ##
-    # A message is valid if it has a content.
+    # A message is valid if it has a body.
     #
     # @return [Boolean]
     def valid?
-      !!content
+      !!body
     end
 
     ##

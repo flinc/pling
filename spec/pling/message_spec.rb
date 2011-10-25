@@ -12,13 +12,13 @@ describe Pling::Message do
 
   context 'when created with a string as first argument' do
     subject { Pling::Message.new('Hello from Pling') }
-    its(:content) { should eq('Hello from Pling') }
+    its(:body) { should eq('Hello from Pling') }
     it { should be_valid }
   end
 
-  context 'when created with a hash that contains a :content key as first argument' do
-    subject { Pling::Message.new(:content => 'Hello from Pling') }
-    its(:content) { should eq('Hello from Pling') }
+  context 'when created with a hash that contains a :body key as first argument' do
+    subject { Pling::Message.new(:body => 'Hello from Pling') }
+    its(:body) { should eq('Hello from Pling') }
     it { should be_valid }
   end
 
@@ -28,10 +28,10 @@ describe Pling::Message do
     end
   end
 
-  describe '#content=' do
-    it 'should call #to_s on the given content' do
-      subject.content = stub(:to_s => 'Hello from Pling')
-      subject.content.should eq('Hello from Pling')
+  describe '#body=' do
+    it 'should call #to_s on the given body' do
+      subject.body = stub(:to_s => 'Hello from Pling')
+      subject.body.should eq('Hello from Pling')
     end
   end
 
