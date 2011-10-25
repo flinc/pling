@@ -13,9 +13,36 @@ module Pling
         end
       end
 
+      def initialize(configuration = {})
+        setup_configuration(configuration)
+      end
+
       def handles?(device)
         self.class.handled_types.include?(device.type)
       end
+
+      ##
+      # Delivers the given message to the given device using the given stack.
+      #
+      # @param message [#to_pling_message]
+      # @param device [#to_pling_device]
+      # @param stack [Array] The stack to use (Default: configuration[:middlewares] || [])
+      def deliver(message, device, stack = configuration[:middlewares] || [])
+        message = Pling._convert(message, :message)
+        device  = Pling._convert(device,  :device)
+
+        return _deliver(message, device) if stack.empty?
+
+        stack.shift.deliver(message, device) do |m, d|
+          deliver(m, d, stack)
+        end
+      end
+
+      protected
+
+        def _deliver(message, device)
+          raise "Please implement #{self.class}#_deliver(message, device)"
+        end
     end
   end
 end

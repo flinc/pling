@@ -41,26 +41,25 @@ module Pling
         authenticate!
       end
 
-      ##
-      # Sends the given message to the given device.
-      #
-      # @param [#to_pling_message] message
-      # @param [#to_pling_device] device
-      # @raise Pling::DeliveryFailed
-      def deliver(message, device)
-        message = Pling._convert(message, :message)
-        device  = Pling._convert(device,  :device)
+      protected
 
-        response = connection.post(configuration[:push_url], {
-          :registration_id => device.identifier,
-          :"data.body" => message.body,
-          :collapse_key => message.body.hash
-        }, { :Authorization => "GoogleLogin auth=#{@token}"})
+        ##
+        # Sends the given message to the given device.
+        #
+        # @param [#to_pling_message] message
+        # @param [#to_pling_device] device
+        # @raise Pling::DeliveryFailed
+        def _deliver(message, device)
+          response = connection.post(configuration[:push_url], {
+            :registration_id => device.identifier,
+            :"data.body" => message.body,
+            :collapse_key => message.body.hash
+          }, { :Authorization => "GoogleLogin auth=#{@token}"})
 
-        if !response.success? || response.body =~ /^Error=(.+)$/
-          raise(Pling::DeliveryFailed, "C2DM Delivery failed: [#{response.status}] #{response.body}")
+          if !response.success? || response.body =~ /^Error=(.+)$/
+            raise(Pling::DeliveryFailed, "C2DM Delivery failed: [#{response.status}] #{response.body}")
+          end
         end
-      end
 
       private
 
