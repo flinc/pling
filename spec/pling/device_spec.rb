@@ -58,7 +58,7 @@ describe Pling::Device do
   describe '#deliver' do
     subject { Pling::Device.new(:identifier => 'XXXX', :type => 'android') }
 
-    let(:message) { stub() }
+    let(:message) { Pling::Message.new }
     let(:gateway) { stub(:deliver => true) }
 
     before { Pling::Gateway.stub(:discover => gateway) }
