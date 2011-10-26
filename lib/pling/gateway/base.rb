@@ -26,8 +26,8 @@ module Pling
       #
       # @param message [#to_pling_message]
       # @param device [#to_pling_device]
-      # @param stack [Array] The stack to use (Default: configuration[:middlewares] || [])
-      def deliver(message, device, stack = configuration[:middlewares] || [])
+      # @param stack [Array] The stack to use (Default: configuration[:middlewares])
+      def deliver(message, device, stack = [] + configuration[:middlewares])
         message = Pling._convert(message, :message)
         device  = Pling._convert(device,  :device)
 
@@ -42,6 +42,12 @@ module Pling
 
         def _deliver(message, device)
           raise "Please implement #{self.class}#_deliver(message, device)"
+        end
+
+        def default_configuration
+          {
+            :middlewares => []
+          }
         end
     end
   end

@@ -50,6 +50,14 @@ describe Pling::Gateway::Base do
       expect { gateway.deliver(message, device) }.to raise_error(/Please implement/)
     end
 
+    it 'should not modify the middleware configuration' do
+      middlewares = [Pling::Middleware::Base.new, Pling::Middleware::Base.new]
+
+      gateway = gateway_class.new(:middlewares => middlewares)
+      gateway.stub(:_deliver)
+
+      expect { gateway.deliver(message, device) }.to_not change(middlewares, :count)
+    end
   end
 
 end
