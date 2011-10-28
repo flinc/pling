@@ -73,18 +73,21 @@ describe Pling::Gateway::APN do
       subject.deliver(message, device)
     end
 
+    it 'should raise an exception when the payload exceeds 256 bytes' do
+      message.body = "X" * 256
+      expect { subject.deliver(message, device) }.to raise_error(Pling::DeliveryFailed, /Payload size of \d+ exceeds allowed size of 256 bytes/)
+    end
+
     it 'should try to deliver the given message' do
       expected_header  = "\x00\x00 \xDE\xF2\xCE-\xE7\xD2\xF2\xEB\x00"
       expected_payload = {
         'aps' => {
-          'alert' => 'Hello from Pling',
-          'badge' => 0,
-          'sound' => 'default'
+          'alert' => 'Hello from Pling'
         }
       }
 
       ssl_socket.stub(:write) do |packet|
-        header, payload = packet.split('@')
+        header, payload = packet.split('$')
         header.should eq(expected_header)
         JSON.parse(payload).should eq(expected_payload)
       end

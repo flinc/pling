@@ -31,26 +31,24 @@ module Pling
         setup_configuration(configuration, :require => [:certificate])
       end
 
-      protected
+      ##
+      # Sends the given message to the given device without using the middleware.
+      #
+      # @param [#to_pling_message] message
+      # @param [#to_pling_device] device
+      def deliver!(message, device)
+        token = [device.identifier].pack('H*')
 
-        ##
-        # Sends the given message to the given device.
-        #
-        # @param [#to_pling_message] message
-        # @param [#to_pling_device] device
-        def deliver!(message, device)
-          token = [device.identifier].pack('H*')
+        data = {
+          :aps => {
+            :alert => message.body
+          }
+        }.to_json
 
-          data = {
-            :aps => {
-              :alert => message.body,
-              :badge => 0,
-              :sound => :default
-            }
-          }.to_json
+        raise Pling::DeliveryFailed, "Payload size of #{data.bytesize} exceeds allowed size of 256 bytes." if data.bytesize > 256
 
-          connection.write([0, 0, 32, token, 0, data.size, data].pack('ccca*cca*'))
-        end
+        connection.write([0, 0, 32, token, 0, data.bytesize, data].pack('ccca*cca*'))
+      end
 
       private
 
