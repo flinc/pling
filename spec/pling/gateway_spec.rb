@@ -17,11 +17,17 @@ describe Pling::Gateway do
 
   let(:gateway) { gateway_class.new }
 
-  before { Pling.stub(:gateways).and_return([gateway]) }
+  before { Pling.stub(:gateways).and_return(Pling::DelayedInitializer.new([gateway])) }
 
   it { should respond_to(:discover) }
 
   describe '.discover' do
+    it 'should do a delayed initialization' do
+      Pling.stub(:gateways).and_return(Pling::DelayedInitializer.new([[gateway_class, { :some => :option }]]))
+      gateway_class.should_receive(:new).with({ :some => :option }).and_return(mock.as_null_object)
+      subject.discover(device)
+    end
+
     it 'should require an argument' do
       expect { subject.discover }.to raise_error ArgumentError
     end

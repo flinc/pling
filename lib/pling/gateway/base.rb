@@ -13,8 +13,11 @@ module Pling
         end
       end
 
-      def initialize(configuration = {})
-        setup_configuration(configuration)
+      def initialize(config = {})
+        setup_configuration(config)
+        middlewares = configuration[:middlewares]
+        configuration.merge!(:middlewares => Pling::DelayedInitializer.new)
+        middlewares.each { |middleware| configuration[:middlewares] << middleware } if middlewares
       end
 
       def handles?(device)
@@ -27,9 +30,11 @@ module Pling
       # @param message [#to_pling_message]
       # @param device [#to_pling_device]
       # @param stack [Array] The stack to use (Default: configuration[:middlewares])
-      def deliver(message, device, stack = [] + configuration[:middlewares])
+      def deliver(message, device, stack = nil)
         message = Pling._convert(message, :message)
         device  = Pling._convert(device,  :device)
+
+        stack ||= [] + configuration[:middlewares].initialize!
 
         return deliver!(message, device) if stack.empty?
 
@@ -37,7 +42,6 @@ module Pling
           deliver(m, d, stack)
         end
       end
-
 
       ##
       # Delivers the given message to the given device without using the middleware.
@@ -52,7 +56,7 @@ module Pling
 
         def default_configuration
           {
-            :middlewares => []
+            :middlewares => Pling::DelayedInitializer.new
           }
         end
     end

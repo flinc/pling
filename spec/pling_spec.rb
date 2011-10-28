@@ -24,19 +24,25 @@ describe Pling do
 
   it { should respond_to(:gateways) }
   it { should respond_to(:gateways=) }
+  its(:gateways) { should eq([]) }
+  its(:gateways) { should be_kind_of Pling::DelayedInitializer }
 
-  describe '.gateways' do
-    it 'should default to an empty array' do
-      subject.gateways.should eq([])
+  describe '.gateways=' do
+    it 'should not change its type when set to an other array' do
+      subject.gateways = []
+      subject.gateways.should be_kind_of Pling::DelayedInitializer
     end
   end
 
   it { should respond_to(:middlewares) }
   it { should respond_to(:middlewares=) }
+  its(:middlewares) { should eq([]) }
+  its(:middlewares) { should be_kind_of Pling::DelayedInitializer }
 
-  describe '.middlewares' do
-    it 'should default to an empty array' do
-      subject.middlewares.should eq([])
+  describe '.middlewares=' do
+    it 'should not change its type when set to an other array' do
+      subject.middlewares = []
+      subject.middlewares.should be_kind_of Pling::DelayedInitializer
     end
   end
 

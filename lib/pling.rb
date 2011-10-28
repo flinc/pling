@@ -8,9 +8,10 @@ module Pling
   autoload :Middleware,   'pling/middleware'
   autoload :Adapter,      'pling/adapter'
   autoload :Configurable, 'pling/configurable'
+  autoload :DelayedInitializer,    'pling/delayed_initializer'
 
-  @gateways = []
-  @middlewares = []
+  @gateways = Pling::DelayedInitializer.new
+  @middlewares = Pling::DelayedInitializer.new
   @adapter = Pling::Adapter::Base.new
 
   class Error < StandardError; end
@@ -23,13 +24,21 @@ module Pling
     # Stores the list of available gateway instances
     #
     # @return [Array] list of available gateways
-    attr_accessor :gateways
+    attr_reader :gateways
+
+    def gateways=(gateways)
+      gateways.each { |gateway| @gateways << gateway }
+    end
 
     ##
     # Stores the list of avaiable middleware instances
     #
     # @return [Array] list of available middleware
-    attr_accessor :middlewares
+    attr_reader :middlewares
+
+    def middlewares=(middlewares)
+      middlewares.each { |middleware| @middlewares << middleware }
+    end
 
     ##
     # Stores the adapter

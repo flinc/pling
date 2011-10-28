@@ -19,5 +19,4 @@ describe Pling::Adapter::Base do
       subject.deliver(message, device)
     end
   end
-
 end
