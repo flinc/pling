@@ -97,7 +97,7 @@ describe Pling do
       second_middleware.should_receive(:deliver).
         with(message, device)
 
-      Pling.stub(:middlewares).and_return([first_middleware, second_middleware])
+      Pling.stub(:middlewares).and_return(Pling::DelayedInitializer.new([first_middleware, second_middleware]))
 
       Pling.deliver(message, device)
     end

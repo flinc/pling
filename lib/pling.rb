@@ -62,9 +62,12 @@ module Pling
     # @param message [#to_pling_message]
     # @param device [#to_pling_device]
     # @param stack [Array] The stack to use (Default: middlewares + [adapter])
-    def deliver(message, device, stack = middlewares + [adapter])
+    def deliver(message, device, stack = nil)
       message = Pling._convert(message, :message)
       device  = Pling._convert(device, :device)
+
+      stack ||= middlewares.initialize! + [adapter]
+
       stack.shift.deliver(message, device) do |m, d|
         deliver(m, d, stack)
       end
