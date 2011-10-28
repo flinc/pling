@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Pling::VERSION
   s.authors     = ["Benedikt Deicke", "Konstantin Tennhard", "Christian Bäuerlein"]
   s.email       = ["benedikt@synatic.net", "me@t6d.de", "fabrik42@gmail.com"]
-  s.homepage    = "https://flinc.github.com/pling"
+  s.homepage    = "http://flinc.github.com/pling"
   s.summary     = %q{Pling is a notification framework that supports multiple gateways}
   s.description = %q{Pling is a notification framework that supports multiple gateways. Currently supported are Android Push and SMS.}
 
