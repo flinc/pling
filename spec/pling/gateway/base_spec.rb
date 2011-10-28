@@ -13,8 +13,6 @@ describe Pling::Gateway::Base do
   let(:device) { Pling::Device.new }
 
   describe '#handles?' do
-
-
     it 'should return true if the gateway supports the given device\'s type' do
       device.type = :android
       gateway.handles?(device).should be_true

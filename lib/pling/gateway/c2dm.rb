@@ -37,7 +37,8 @@ module Pling
       # @option configuration [String] :connection Any options for Faraday (Optional)
       # @raise Pling::AuthenticationFailed
       def initialize(configuration)
-        setup_configuration(configuration, :require => [:email, :password, :source])
+        super
+        require_configuration([:email, :password, :source])
         authenticate!
       end
 

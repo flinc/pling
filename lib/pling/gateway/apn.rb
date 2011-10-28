@@ -28,7 +28,8 @@ module Pling
       # @option configuration [String] :host Host to connect to (Default: gateway.push.apple.com)
       # @option configuration [Integer] :port Port to connect to (Default: 2195)
       def initialize(configuration)
-        setup_configuration(configuration, :require => [:certificate])
+        super
+        require_configuration(:certificate)
       end
 
       ##
