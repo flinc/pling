@@ -38,11 +38,17 @@ module Pling
         end
       end
 
-      protected
 
-        def deliver!(message, device)
-          raise NotImplementedError, "Please implement #{self.class}#deliver!(message, device)"
-        end
+      ##
+      # Delivers the given message to the given device without using the middleware.
+      #
+      # @param message [#to_pling_message]
+      # @param device [#to_pling_device]
+      def deliver!(message, device)
+        raise NotImplementedError, "Please implement #{self.class}#deliver!(message, device)"
+      end
+
+      protected
 
         def default_configuration
           {
