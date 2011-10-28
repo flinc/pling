@@ -34,21 +34,26 @@ describe Pling::Gateway::APN do
 
   context 'when created with a valid configuration' do
     it 'should allow configuration of the :certificate' do
-      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:certificate => '/some/path'))
       File.should_receive(:read).with('/some/path').and_return('--- SOME CERT CONTENT ---')
+      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:certificate => '/some/path'))
       gateway.deliver(message, device)
     end
 
     it 'should allow configuration of the :host' do
-      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:host => 'some-host'))
       TCPSocket.should_receive(:new).with('some-host', anything).and_return(tcp_socket)
+      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:host => 'some-host'))
       gateway.deliver(message, device)
     end
 
     it 'should allow configuration of the :port' do
-      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:port => 1234))
       TCPSocket.should_receive(:new).with(anything, 1234).and_return(tcp_socket)
+      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:port => 1234))
       gateway.deliver(message, device)
+    end
+
+    it 'should establish a connection' do
+      ssl_socket.should_receive(:connect)
+      Pling::Gateway::APN.new(valid_configuration)
     end
   end
 

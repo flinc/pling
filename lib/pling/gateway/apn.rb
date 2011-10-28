@@ -30,6 +30,7 @@ module Pling
       def initialize(configuration)
         super
         require_configuration(:certificate)
+        connection
       end
 
       ##
