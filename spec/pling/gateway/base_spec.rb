@@ -41,12 +41,12 @@ describe Pling::Gateway::Base do
         with(message, device)
 
       gateway = gateway_class.new(:middlewares => [first_middleware, second_middleware])
-      gateway.stub(:_deliver)
+      gateway.stub(:deliver!)
 
       gateway.deliver(message, device)
     end
 
-    it 'should raise an error if #_deliver is not overwritten' do
+    it 'should raise an error if #deliver! is not overwritten' do
       expect { gateway.deliver(message, device) }.to raise_error(/Please implement/)
     end
 
@@ -54,7 +54,7 @@ describe Pling::Gateway::Base do
       middlewares = [Pling::Middleware::Base.new, Pling::Middleware::Base.new]
 
       gateway = gateway_class.new(:middlewares => middlewares)
-      gateway.stub(:_deliver)
+      gateway.stub(:deliver!)
 
       expect { gateway.deliver(message, device) }.to_not change(middlewares, :count)
     end

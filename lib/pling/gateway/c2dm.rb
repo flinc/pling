@@ -49,7 +49,7 @@ module Pling
         # @param [#to_pling_message] message
         # @param [#to_pling_device] device
         # @raise Pling::DeliveryFailed
-        def _deliver(message, device)
+        def deliver!(message, device)
           response = connection.post(configuration[:push_url], {
             :registration_id => device.identifier,
             :"data.body" => message.body,

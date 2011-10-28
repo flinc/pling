@@ -31,7 +31,7 @@ module Pling
         message = Pling._convert(message, :message)
         device  = Pling._convert(device,  :device)
 
-        return _deliver(message, device) if stack.empty?
+        return deliver!(message, device) if stack.empty?
 
         stack.shift.deliver(message, device) do |m, d|
           deliver(m, d, stack)
@@ -40,8 +40,8 @@ module Pling
 
       protected
 
-        def _deliver(message, device)
-          raise "Please implement #{self.class}#_deliver(message, device)"
+        def deliver!(message, device)
+          raise NotImplementedError, "Please implement #{self.class}#deliver!(message, device)"
         end
 
         def default_configuration

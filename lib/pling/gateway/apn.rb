@@ -38,7 +38,7 @@ module Pling
         #
         # @param [#to_pling_message] message
         # @param [#to_pling_device] device
-        def _deliver(message, device)
+        def deliver!(message, device)
           token = [device.identifier].pack('H*')
 
           data = {
