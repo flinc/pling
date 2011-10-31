@@ -91,6 +91,22 @@ describe Pling::Gateway do
 
       expect { gateway.deliver(message, device) }.to_not change(middlewares, :count)
     end
-  end
 
+    it 'should raise an Pling::Errors if no on_exception callback is set' do
+      gateway.stub(:deliver!).and_raise(Pling::Error)
+      expect { gateway.deliver(message, device) }.to raise_error Pling::Error
+    end
+
+    it 'should not raise an Pling::Errors if an on_exception callback is set' do
+      gateway = gateway_class.new(:on_exception => lambda {})
+      gateway.stub(:deliver!).and_raise(Pling::Error)
+      expect { gateway.deliver(message, device) }.to_not raise_error Pling::Error
+    end
+
+    it 'should pass the exception to the callback' do
+      gateway = gateway_class.new(:on_exception => lambda { |error| error.should be_kind_of Pling::Error })
+      gateway.stub(:deliver!).and_raise(Pling::Error)
+      gateway.deliver(message, device)
+    end
+  end
 end

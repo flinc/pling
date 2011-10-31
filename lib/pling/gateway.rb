@@ -33,6 +33,8 @@ module Pling
 
     ##
     # Delivers the given message to the given device using the given stack.
+    # If the :on_exception callback is configured it'll rescue all Pling::Errors
+    # and pass them to the given callback.
     #
     # @param message [#to_pling_message]
     # @param device [#to_pling_device]
@@ -48,6 +50,9 @@ module Pling
       stack.shift.deliver(message, device) do |m, d|
         deliver(m, d, stack)
       end
+    rescue Pling::Error => error
+      callback = configuration[:on_exception]
+      callback && callback.respond_to?(:call) ? callback.call(error) : raise
     end
 
     ##
