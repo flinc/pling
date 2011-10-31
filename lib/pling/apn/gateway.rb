@@ -43,9 +43,15 @@ module Pling
 
         data = {
           :aps => {
-            :alert => message.body
-          }
-        }.to_json
+            :alert => message.body,
+            :badge => message.badge && message.badge.to_i,
+            :sound => message.sound
+          }.delete_if { |_, value| value.nil? }
+        }
+
+        data.merge!(message.payload) if configuration[:payload]
+
+        data = data.to_json
 
         if data.bytesize > 256
           raise Pling::DeliveryFailed.new(
@@ -62,7 +68,8 @@ module Pling
         def default_configuration
           super.merge({
             :host => 'gateway.push.apple.com',
-            :port => 2195
+            :port => 2195,
+            :payload => false
           })
         end
 
