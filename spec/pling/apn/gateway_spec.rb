@@ -84,7 +84,7 @@ describe Pling::APN::Gateway do
     end
 
     it 'should try to deliver the given message' do
-      expected_header  = "\x00\x00 \xDE\xF2\xCE-\xE7\xD2\xF2\xEB\x00"
+      expected_header  = "\x00\x00 \xDE\xF2\xCE-\xE7\xD2\xF2\xEB\x00$"
       expected_payload = {
         'aps' => {
           'alert' => 'Hello from Pling'
@@ -92,12 +92,89 @@ describe Pling::APN::Gateway do
       }
 
       ssl_socket.stub(:write) do |packet|
-        header, payload = packet.split('$')
+        header, payload = packet[0..12], packet[13..-1]
         header.should eq(expected_header)
         JSON.parse(payload).should eq(expected_payload)
       end
 
       subject.deliver(message, device)
+    end
+
+    it 'should include the given badge' do
+      expected_payload = {
+        'aps' => {
+          'alert' => 'Hello from Pling',
+          'badge' => 10
+        }
+      }
+
+      ssl_socket.stub(:write) do |packet|
+        JSON.parse(packet[13..-1]).should eq(expected_payload)
+      end
+
+      message.badge = 10
+
+      subject.deliver(message, device)
+    end
+
+    it 'should include the given badge' do
+      expected_payload = {
+        'aps' => {
+          'alert' => 'Hello from Pling',
+          'sound' => 'pling'
+        }
+      }
+
+      ssl_socket.stub(:write) do |packet|
+        JSON.parse(packet[13..-1]).should eq(expected_payload)
+      end
+
+      message.sound = :pling
+
+      subject.deliver(message, device)
+    end
+
+    context 'when configured to include payload' do
+      before do
+        valid_configuration.merge!(:payload => true)
+        message.payload = { :data => 'available' }
+      end
+
+      it 'should include the given payload' do
+        expected_payload = {
+          'aps' => {
+            'alert' => 'Hello from Pling'
+          },
+          'data' => 'available'
+        }
+
+        ssl_socket.stub(:write) do |packet|
+          JSON.parse(packet[13..-1]).should eq(expected_payload)
+        end
+
+        subject.deliver(message, device)
+      end
+    end
+
+    context 'when configured to not include payload' do
+      before do
+        valid_configuration.merge!(:payload => false)
+        message.payload = { :data => 'available' }
+      end
+
+      it 'should not include the given payload' do
+        expected_payload = {
+          'aps' => {
+            'alert' => 'Hello from Pling'
+          }
+        }
+
+        ssl_socket.stub(:write) do |packet|
+          JSON.parse(packet[13..-1]).should eq(expected_payload)
+        end
+
+        subject.deliver(message, device)
+      end
     end
   end
 end
