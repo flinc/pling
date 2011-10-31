@@ -14,7 +14,7 @@ module Pling
     end
     
     ##
-    # The message subject
+    # The message subject - not supported by all gateways
     #
     # @overload subject
     # @overload subject=(subject)
@@ -26,7 +26,19 @@ module Pling
       @subject = subject
     end
     
-
+    ##
+    # The message badge - not supported by all gateways
+    #
+    # @overload badge
+    # @overload badge=(badge)
+    #   @param [#to_s] badge
+    attr_reader :badge
+    
+    def badge=(badge)
+      badge &&= badge.to_s
+      @badge = badge
+    end
+    
     ##
     # Creates a new Pling::Message instance with the given body
     #
