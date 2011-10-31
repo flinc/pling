@@ -47,7 +47,12 @@ module Pling
           }
         }.to_json
 
-        raise Pling::DeliveryFailed, "Payload size of #{data.bytesize} exceeds allowed size of 256 bytes." if data.bytesize > 256
+        if data.bytesize > 256
+          raise Pling::DeliveryFailed.new(
+                "Payload size of #{data.bytesize} exceeds allowed size of 256 bytes.",
+                message,
+                device)
+        end
 
         connection.write([0, 0, 32, token, 0, data.bytesize, data].pack('ccca*cca*'))
       end
