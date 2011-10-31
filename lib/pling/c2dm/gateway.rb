@@ -57,11 +57,22 @@ module Pling
       # @param [#to_pling_device] device
       # @raise Pling::DeliveryFailed
       def deliver!(message, device)
-        response = connection.post(configuration[:push_url], {
+        data = {
           :registration_id => device.identifier,
-          :"data.body" => message.body,
+          :'data.body'  => message.body,
+          :'data.badge' => message.badge,
+          :'data.sound' => message.sound,
+          :'data.subject' => message.subject,
           :collapse_key => message.body.hash
-        }, { :Authorization => "GoogleLogin auth=#{@token}"})
+        }.delete_if { |_, value| value.nil? }
+
+        if configuration[:payload] && message.payload
+          message.payload.each do |key, value|
+            data["data.#{key}".to_sym] = value
+          end
+        end
+
+        response = connection.post(configuration[:push_url], data, { :Authorization => "GoogleLogin auth=#{@token}"})
 
         if !response.success? || response.body =~ /^Error=(.+)$/
           error_class = Pling::C2DM.const_get($1) rescue Pling::DeliveryFailed

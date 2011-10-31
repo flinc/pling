@@ -160,23 +160,69 @@ describe Pling::C2DM::Gateway do
     end
 
     it 'should raise a Pling::DeliveryFailed exception if the delivery was not successful' do
-      connection_mock.should_receive(:post).
-        with('https://android.apis.google.com/c2dm/send', valid_push_params, valid_push_headers).
-        and_return(push_response_mock)
-
+      connection_mock.should_receive(:post).and_return(push_response_mock)
       push_response_mock.stub(:status => 401, :success? => false, :body => "Something went wrong")
 
       expect { subject.deliver(message, device) }.to raise_error Pling::DeliveryFailed, /Something went wrong/
     end
 
     it 'should raise a Pling::DeliveryFailed exception if the response body contained an error' do
-      connection_mock.should_receive(:post).
-        with('https://android.apis.google.com/c2dm/send', valid_push_params, valid_push_headers).
-        and_return(push_response_mock)
-
+      connection_mock.should_receive(:post).and_return(push_response_mock)
       push_response_mock.stub(:status => 200, :success? => true, :body => "Error=SomeError")
 
       expect { subject.deliver(message, device) }.to raise_error Pling::DeliveryFailed, /Error=SomeError/
+    end
+
+    it 'should send data.badge if the given message has a badge' do
+      connection_mock.should_receive(:post).
+        with(anything, hash_including(:'data.badge' => '10'), anything).
+        and_return(push_response_mock)
+      message.badge = 10
+      subject.deliver(message, device)
+    end
+
+    it 'should send data.sound if the given message has a sound' do
+      connection_mock.should_receive(:post).
+        with(anything, hash_including(:'data.sound' => 'pling'), anything).
+        and_return(push_response_mock)
+      message.sound = :pling
+      subject.deliver(message, device)
+    end
+
+    it 'should send data.subject if the given message has a subject' do
+      connection_mock.should_receive(:post).
+        with(anything, hash_including(:'data.subject' => 'Important!'), anything).
+        and_return(push_response_mock)
+      message.subject = 'Important!'
+      subject.deliver(message, device)
+    end
+
+    context 'when configured to include payload' do
+      before do
+        valid_configuration.merge!(:payload => true)
+        message.payload = { :data => 'available' }
+      end
+
+      it 'should include the given payload' do
+        connection_mock.should_receive(:post).
+          with(anything, hash_including(:'data.data' => 'available'), anything).
+          and_return(push_response_mock)
+        subject.deliver(message, device)
+      end
+    end
+
+    context 'when configured to not include payload' do
+      before do
+        valid_configuration.merge!(:payload => false)
+        message.payload = { :data => 'available' }
+      end
+
+      it 'should include the given payload' do
+        connection_mock.should_receive(:post).
+          with(anything, hash_not_including(:'data.data' => 'available'), anything).
+          and_return(push_response_mock)
+        subject.deliver(message, device)
+      end
     end
 
     [:QuotaExceeded, :DeviceQuotaExceeded,
