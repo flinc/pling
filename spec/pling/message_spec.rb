@@ -32,6 +32,17 @@ describe Pling::Message do
     its(:badge) { should eq('1') }
   end
 
+  context 'when created with a hash that contains a :sound key' do
+    subject { Pling::Message.new(:sound => '*pling*')}
+    its(:sound) { should eq('*pling*') }
+  end
+  
+
+  context 'when created with a hash that contains a :badge key' do
+    subject { Pling::Message.new(:badge => 1)}
+    its(:badge) { should eq('1') }
+  end
+
   context 'when created with an hash of invalid attributes' do
     it 'should ignore the invalid paramters' do
       expect { Pling::Message.new({ :random_param => true }) }.to_not raise_error

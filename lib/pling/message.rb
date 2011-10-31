@@ -40,6 +40,19 @@ module Pling
     end
     
     ##
+    # The message sound - not supported by all gateways
+    #
+    # @overload sound
+    # @overload sound=(sound)
+    #   @param [#to_s] sound
+    attr_reader :sound
+    
+    def sound=(sound)
+      sound &&= sound.to_s
+      @sound = sound
+    end
+    
+    ##
     # Creates a new Pling::Message instance with the given body
     #
     # @overload initialize(body)
