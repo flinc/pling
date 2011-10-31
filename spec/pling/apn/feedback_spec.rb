@@ -9,5 +9,15 @@ describe Pling::APN::Feedback do
   end
 
   it { should respond_to(:get) }
+  
+  context "when getting feedback" do
+    
+    subject { described_class.new.get }
+    
+    it "should be in form of a list" do
+      subject.should be_kind_of(Array)
+    end
+    
+  end
 
 end
