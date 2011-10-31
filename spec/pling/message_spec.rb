@@ -36,11 +36,15 @@ describe Pling::Message do
     subject { Pling::Message.new(:sound => '*pling*')}
     its(:sound) { should eq('*pling*') }
   end
-  
 
   context 'when created with a hash that contains a :badge key' do
     subject { Pling::Message.new(:badge => 1)}
     its(:badge) { should eq('1') }
+  end
+
+  context 'when created with a hash that contains a :payload key' do
+    subject { Pling::Message.new(:payload => { :data => true })}
+    its(:payload) { should eq({ :data => true }) }
   end
 
   context 'when created with an hash of invalid attributes' do

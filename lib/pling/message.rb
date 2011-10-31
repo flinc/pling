@@ -53,6 +53,19 @@ module Pling
     end
     
     ##
+    # The message payload - not supported by all gateways
+    #
+    # @overload payload
+    # @overload payload=(sound)
+    #   @param [#to_hash] payload
+    attr_reader :payload
+    
+    def payload=(payload)
+      payload &&= payload.to_hash
+      @payload = payload
+    end
+
+    ##
     # Creates a new Pling::Message instance with the given body
     #
     # @overload initialize(body)
