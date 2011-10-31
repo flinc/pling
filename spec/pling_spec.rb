@@ -110,6 +110,15 @@ end
 
 describe Pling::DeliveryFailed do
   it { should be_kind_of Pling::Error }
+  it { should respond_to :pling_message }
+  it { should respond_to :pling_device }
+
+  it 'should initialize #pling_message and #pling_device' do
+    error = Pling::DeliveryFailed.new('message', 'pling message', 'pling device')
+    error.message.should eq('message')
+    error.pling_message.should eq('pling message')
+    error.pling_device.should eq('pling device')
+  end
 end
 
 describe Pling::NoGatewayFound do

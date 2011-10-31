@@ -18,8 +18,18 @@ module Pling
 
   class Error < StandardError; end
   class AuthenticationFailed < Error; end
-  class DeliveryFailed < Error; end
   class NoGatewayFound < Error; end
+
+  class DeliveryFailed < Error
+    attr_reader :pling_message, :pling_device
+
+    def initialize(message = nil, pling_message = nil, pling_device = nil)
+      super(message)
+      @pling_message = pling_message
+      @pling_device  = pling_device
+    end
+  end
+
 
   class << self
     ##
