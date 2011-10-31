@@ -178,5 +178,14 @@ describe Pling::C2DM::Gateway do
 
       expect { subject.deliver(message, device) }.to raise_error Pling::DeliveryFailed, /Error=SomeError/
     end
+
+    [:QuotaExceeded, :DeviceQuotaExceeded,
+     :InvalidRegistration, :NotRegistered,
+     :MessageTooBig, :MissingCollapseKey].each do |exception|
+      it "should raise a Pling::C2DM::#{exception} when the response body is ''" do
+        push_response_mock.stub(:body => "Error=#{exception}")
+        expect { subject.deliver(message, device) }.to raise_error Pling::C2DM.const_get(exception)
+      end
+    end
   end
-end
+end     

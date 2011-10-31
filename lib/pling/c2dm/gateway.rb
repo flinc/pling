@@ -2,6 +2,14 @@ require 'faraday'
 
 module Pling
   module C2DM
+
+    class QuotaExceeded       < Pling::DeliveryFailed; end
+    class DeviceQuotaExceeded < Pling::DeliveryFailed; end
+    class InvalidRegistration < Pling::DeliveryFailed; end
+    class NotRegistered       < Pling::DeliveryFailed; end
+    class MessageTooBig       < Pling::DeliveryFailed; end
+    class MissingCollapseKey  < Pling::DeliveryFailed; end
+
     ##
     # Pling gateway to communicate with Google's Android C2DM service.
     #
@@ -56,7 +64,8 @@ module Pling
         }, { :Authorization => "GoogleLogin auth=#{@token}"})
 
         if !response.success? || response.body =~ /^Error=(.+)$/
-          raise(Pling::DeliveryFailed, "C2DM Delivery failed: [#{response.status}] #{response.body}")
+          error_class = Pling::C2DM.const_get($1) rescue Pling::DeliveryFailed
+          raise error_class.new("C2DM Delivery failed: [#{response.status}] #{response.body}", message, device)
         end
       end
 
