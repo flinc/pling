@@ -12,6 +12,20 @@ module Pling
       body &&= body.to_s
       @body = body
     end
+    
+    ##
+    # The message subject
+    #
+    # @overload subject
+    # @overload subject=(subject)
+    #   @param [#to_s] subject
+    attr_reader :subject
+    
+    def subject=(subject)
+      subject &&= subject.to_s
+      @subject = subject
+    end
+    
 
     ##
     # Creates a new Pling::Message instance with the given body

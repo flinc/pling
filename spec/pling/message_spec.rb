@@ -22,6 +22,11 @@ describe Pling::Message do
     it { should be_valid }
   end
 
+  context 'when created with a hash that contains a :subject key' do
+    subject { Pling::Message.new(:subject => "Hello!")}
+    its(:subject) { should eq('Hello!')}
+  end
+
   context 'when created with an hash of invalid attributes' do
     it 'should ignore the invalid paramters' do
       expect { Pling::Message.new({ :random_param => true }) }.to_not raise_error
