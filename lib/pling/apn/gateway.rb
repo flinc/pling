@@ -3,7 +3,7 @@ require 'openssl'
 require 'json'
 
 module Pling
-  module Gateway
+  module APN
     ##
     # Pling gateway to communicate with Apple's Push Notification service.
     #
@@ -12,12 +12,12 @@ module Pling
     #
     # Configure it by providing the path to your certificate:
     #
-    #     Pling::Gateway::APN.new({
+    #     Pling::APN::Gateway.new({
     #       :certificate => '/path/to/certificate.pem', # Required
     #       :host => 'gateway.sandbox.push.apple.com'   # Optional
     #     })
     #
-    class APN < Base
+    class Gateway < Pling::Gateway
       handles :apple, :apn, :ios, :ipad, :iphone, :ipod
 
       ##

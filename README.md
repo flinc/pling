@@ -24,8 +24,8 @@ Add this line to your `Gemfile`:
 The configuration is pretty simple. Just add a configuration block like this to your code:
 
     Pling.configure do |config|
-      config.gateways.use Pling::Gateway::C2DM, :email => 'your-email@gmail.com', :password => 'your-password', :source => 'your-app-name'
-      config.gateways.use Pling::Gateway::APN, :certificate => '/path/to/certificate.pem'
+      config.gateways.use Pling::C2DM::Gateway, :email => 'your-email@gmail.com', :password => 'your-password', :source => 'your-app-name'
+      config.gateways.use Pling::APN::Gateway, :certificate => '/path/to/certificate.pem'
 
       # config.middleware.use Your::Custom::Middleware, :your => :custom, :configuration => true
 
@@ -106,7 +106,7 @@ Pling has support for middlewares. Currently pling itself does not provide any m
 You can either add middlewares for all gateways or for specific gateways:
 
     Pling.configure do |config|
-      config.gateways.use Pling::Gateway::APN, {
+      config.gateways.use Pling::APN::Gateway, {
         :certificate => '/path/to/certificate.pem',
         :middlewares => [
           [Pling::Middleware::TimeFilter, { :range => 9..17 }] # Don't deliver any messages to iOS devices between 9am and 5pm

@@ -5,6 +5,8 @@ module Pling
   autoload :Device,       'pling/device'
   autoload :Message,      'pling/message'
   autoload :Gateway,      'pling/gateway'
+  autoload :APN,          'pling/apn'
+  autoload :C2DM,         'pling/c2dm'
   autoload :Middleware,   'pling/middleware'
   autoload :Adapter,      'pling/adapter'
   autoload :Configurable, 'pling/configurable'

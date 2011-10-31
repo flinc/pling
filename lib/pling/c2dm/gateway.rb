@@ -1,7 +1,7 @@
 require 'faraday'
 
 module Pling
-  module Gateway
+  module C2DM
     ##
     # Pling gateway to communicate with Google's Android C2DM service.
     #
@@ -10,7 +10,7 @@ module Pling
     #
     # Example:
     #
-    #   Pling::Gateway::C2DM.new({
+    #   Pling::C2DM::Gateway.new({
     #     :email    => 'your-email@gmail.com', # Your google account's email address (Required)
     #     :password => 'your-password',        # Your google account's password (Required)
     #     :source   => 'your-app-name',        # Your applications source identifier (Required)
@@ -20,7 +20,7 @@ module Pling
     #     :adapter            => :net_http,    # The Faraday adapter you want to use (Optional, Default: :net_http)
     #     :connection         => {}            # Options you want to pass to Faraday (Optional, Default: {})
     #   })
-    class C2DM < Base
+    class Gateway < Pling::Gateway
 
       attr_reader :token
 

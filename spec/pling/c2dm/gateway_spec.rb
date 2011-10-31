@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Pling::Gateway::C2DM do
+describe Pling::C2DM::Gateway do
 
   let(:valid_configuration) do
     { :email => 'someone@gmail.com', :password => 'random', :source => 'some-source' }
@@ -33,7 +33,7 @@ describe Pling::Gateway::C2DM do
       it "should raise an error when :#{attribute} is missing" do
         configuration = valid_configuration
         configuration.delete(attribute)
-        expect { Pling::Gateway::C2DM.new(configuration) }.to raise_error(ArgumentError, /:#{attribute} is missing/)
+        expect { Pling::C2DM::Gateway.new(configuration) }.to raise_error(ArgumentError, /:#{attribute} is missing/)
       end
     end
   end
@@ -52,7 +52,7 @@ describe Pling::Gateway::C2DM do
       end
 
       it 'should not raise an error' do
-        expect { Pling::Gateway::C2DM.new(valid_configuration) }.to_not raise_error
+        expect { Pling::C2DM::Gateway.new(valid_configuration) }.to_not raise_error
       end
 
       it 'should try to authenticate' do
@@ -60,31 +60,31 @@ describe Pling::Gateway::C2DM do
           with('https://www.google.com/accounts/ClientLogin', valid_authentication_params).
           and_return(authentication_response_mock)
 
-        Pling::Gateway::C2DM.new(valid_configuration)
+        Pling::C2DM::Gateway.new(valid_configuration)
       end
 
       it 'should extract the token from the response body' do
-        gateway = Pling::Gateway::C2DM.new(valid_configuration)
+        gateway = Pling::C2DM::Gateway.new(valid_configuration)
         gateway.token.should eq('S0ME-ToKeN123')
       end
 
       it 'should raise an error if authentication was not successful' do
         authentication_response_mock.stub(:status => 403, :success? => false, :body => 'Error=BadAuthentication')
 
-        expect { Pling::Gateway::C2DM.new(valid_configuration) }.to raise_error(Pling::AuthenticationFailed, /Authentication failed: \[403\] Error=BadAuthentication/)
+        expect { Pling::C2DM::Gateway.new(valid_configuration) }.to raise_error(Pling::AuthenticationFailed, /Authentication failed: \[403\] Error=BadAuthentication/)
       end
 
       it 'should raise an error if it could not extract a token from the response' do
         authentication_response_mock.stub(:body).and_return('SOMERANDOMBODY')
 
-        expect { Pling::Gateway::C2DM.new(valid_configuration) }.to raise_error(Pling::AuthenticationFailed, /Token extraction failed/)
+        expect { Pling::C2DM::Gateway.new(valid_configuration) }.to raise_error(Pling::AuthenticationFailed, /Token extraction failed/)
       end
     end
 
     context 'configuration' do
       it 'should allow configuring Faraday\'s :connection settings' do
         Faraday.should_receive(:new).with(:ssl => { :verify => false })
-        Pling::Gateway::C2DM.new(valid_configuration.merge(:connection => { :ssl => { :verify => false }}))
+        Pling::C2DM::Gateway.new(valid_configuration.merge(:connection => { :ssl => { :verify => false }}))
       end
 
       it 'should use Faraday::Response::Logger when :debug is set to true' do
@@ -92,7 +92,7 @@ describe Pling::Gateway::C2DM do
         builder.should_receive(:use).with(Faraday::Response::Logger)
         Faraday.stub(:new).and_yield(builder).and_return(connection_mock)
 
-        Pling::Gateway::C2DM.new(valid_configuration.merge(:debug => true))
+        Pling::C2DM::Gateway.new(valid_configuration.merge(:debug => true))
       end
 
       it 'should use the adapter set with :adapter' do
@@ -100,7 +100,7 @@ describe Pling::Gateway::C2DM do
         builder.should_receive(:adapter).with(:typheus)
         Faraday.stub(:new).and_yield(builder).and_return(connection_mock)
 
-        Pling::Gateway::C2DM.new(valid_configuration.merge(:adapter => :typheus))
+        Pling::C2DM::Gateway.new(valid_configuration.merge(:adapter => :typheus))
       end
 
       it 'should allow configuring the authentication_url' do
@@ -108,13 +108,13 @@ describe Pling::Gateway::C2DM do
           with('http://example.com/authentication', anything).
           and_return(authentication_response_mock)
 
-        Pling::Gateway::C2DM.new(valid_configuration.merge(:authentication_url => 'http://example.com/authentication'))
+        Pling::C2DM::Gateway.new(valid_configuration.merge(:authentication_url => 'http://example.com/authentication'))
       end
     end
   end
 
   describe '#deliver' do
-    subject { Pling::Gateway::C2DM.new(valid_configuration) }
+    subject { Pling::C2DM::Gateway.new(valid_configuration) }
 
     let(:message) { Pling::Message.new('Hello from Pling') }
     let(:device)  { Pling::Device.new(:identifier => 'DEVICEIDENTIFIER', :type => :android) }

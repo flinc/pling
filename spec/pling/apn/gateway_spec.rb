@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Pling::Gateway::APN do
+describe Pling::APN::Gateway do
 
   let(:valid_configuration) { { :certificate => '/path/to/certificate.pem' } }
 
@@ -23,42 +23,42 @@ describe Pling::Gateway::APN do
   end
 
   it 'should handle various apn related device types' do
-    Pling::Gateway::APN.handled_types.should =~ [:apple, :apn, :ios, :ipad, :iphone, :ipod]
+    Pling::APN::Gateway.handled_types.should =~ [:apple, :apn, :ios, :ipad, :iphone, :ipod]
   end
 
   context 'when created with an invalid configuration' do
     it "should raise an error when :certificate is missing" do
-      expect { Pling::Gateway::APN.new({}) }.to raise_error(ArgumentError, /:certificate is missing/)
+      expect { Pling::APN::Gateway.new({}) }.to raise_error(ArgumentError, /:certificate is missing/)
     end
   end
 
   context 'when created with a valid configuration' do
     it 'should allow configuration of the :certificate' do
       File.should_receive(:read).with('/some/path').and_return('--- SOME CERT CONTENT ---')
-      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:certificate => '/some/path'))
+      gateway = Pling::APN::Gateway.new(valid_configuration.merge(:certificate => '/some/path'))
       gateway.deliver(message, device)
     end
 
     it 'should allow configuration of the :host' do
       TCPSocket.should_receive(:new).with('some-host', anything).and_return(tcp_socket)
-      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:host => 'some-host'))
+      gateway = Pling::APN::Gateway.new(valid_configuration.merge(:host => 'some-host'))
       gateway.deliver(message, device)
     end
 
     it 'should allow configuration of the :port' do
       TCPSocket.should_receive(:new).with(anything, 1234).and_return(tcp_socket)
-      gateway = Pling::Gateway::APN.new(valid_configuration.merge(:port => 1234))
+      gateway = Pling::APN::Gateway.new(valid_configuration.merge(:port => 1234))
       gateway.deliver(message, device)
     end
 
     it 'should establish a connection' do
       ssl_socket.should_receive(:connect)
-      Pling::Gateway::APN.new(valid_configuration)
+      Pling::APN::Gateway.new(valid_configuration)
     end
   end
 
   describe '#deliver' do
-    subject { Pling::Gateway::APN.new(valid_configuration) }
+    subject { Pling::APN::Gateway.new(valid_configuration) }
 
     it 'should raise an error if no message is given' do
       expect { subject.deliver(nil, device) }.to raise_error
