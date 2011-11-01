@@ -1,17 +1,39 @@
 module Pling
   module APN
     class Feedback
-      
-      def get
-        @feedback ||= fetch
+      include Pling::Configurable
+
+      def initialize(config)
+        setup_configuration(config, :require => :certificate)
       end
-      
-      private
-      
-        def fetch
-          []
+
+      def get
+        tokens = []
+        while line = connection.gets
+          time, length = line.unpack("Nn")
+          tokens << line.unpack("x6H#{length * 2}").first
         end
-      
+        tokens
+      end
+
+      private
+
+        def connection
+          @connection ||= Connection.new(
+            :host        => configuration[:host],
+            :port        => configuration[:port],
+            :certificate => configuration[:certificate]
+          )
+        end
+
+        def default_configuration
+          super.merge(
+            :host => 'feedback.push.apple.com',
+            :port => 2195,
+            :payload => false
+          )
+        end
+
     end
   end
 end
