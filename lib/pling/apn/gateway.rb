@@ -7,7 +7,7 @@ module Pling
     ##
     # Pling gateway to communicate with Apple's Push Notification service.
     #
-    # This gateway handles these device types: 
+    # This gateway handles these device types:
     #     :apple, :apn, :ios, :ipad, :iphone, :ipod
     #
     # Configure it by providing the path to your certificate:
@@ -53,9 +53,9 @@ module Pling
 
         if data.bytesize > 256
           raise Pling::DeliveryFailed.new(
-                "Payload size of #{data.bytesize} exceeds allowed size of 256 bytes.",
-                message,
-                device)
+            "Payload size of #{data.bytesize} exceeds allowed size of 256 bytes.",
+            message,
+          device)
         end
 
         connection.write([0, 32, device.identifier, data.bytesize, data].pack('cnH32na*'))
@@ -64,32 +64,21 @@ module Pling
       private
 
         def default_configuration
-          super.merge({
+          super.merge(
             :host => 'gateway.push.apple.com',
             :port => 2195,
             :payload => false
-          })
+          )
         end
 
         def connection
-          @connection ||= OpenSSL::SSL::SSLSocket.new(tcp_socket, ssl_context).tap do |socket|
-            socket.sync = true
-            socket.connect
-          end
+          @connection ||= Connection.new(
+            :host        => configuration[:host],
+            :port        => configuration[:port],
+            :certificate => configuration[:certificate]
+          )
         end
 
-        def ssl_context
-          @ssl_context ||= OpenSSL::SSL::SSLContext.new.tap do |context|
-            certificate  = File.read(configuration[:certificate])
-
-            context.cert = OpenSSL::X509::Certificate.new(certificate)
-            context.key  = OpenSSL::PKey::RSA.new(certificate)
-          end
-        end
-
-        def tcp_socket
-          @tcp_socket ||= TCPSocket.new(configuration[:host], configuration[:port])
-        end
     end
   end
 end
