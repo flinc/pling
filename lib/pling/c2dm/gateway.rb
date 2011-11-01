@@ -2,14 +2,6 @@ require 'faraday'
 
 module Pling
   module C2DM
-
-    class QuotaExceeded       < Pling::DeliveryFailed; end
-    class DeviceQuotaExceeded < Pling::DeliveryFailed; end
-    class InvalidRegistration < Pling::DeliveryFailed; end
-    class NotRegistered       < Pling::DeliveryFailed; end
-    class MessageTooBig       < Pling::DeliveryFailed; end
-    class MissingCollapseKey  < Pling::DeliveryFailed; end
-
     ##
     # Pling gateway to communicate with Google's Android C2DM service.
     #
