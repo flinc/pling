@@ -29,7 +29,7 @@ module Pling
         def default_configuration
           super.merge(
             :host => 'feedback.push.apple.com',
-            :port => 2195
+            :port => 2196
           )
         end
 
