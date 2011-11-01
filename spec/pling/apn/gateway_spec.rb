@@ -5,7 +5,7 @@ describe Pling::APN::Gateway do
   let(:valid_configuration) { { :certificate => '/path/to/certificate.pem' } }
 
   let(:message) { Pling::Message.new('Hello from Pling') }
-  let(:device)  { Pling::Device.new(:identifier => 'DEVICEIDENTIFIER', :type => :iphone) }
+  let(:device)  { Pling::Device.new(:identifier => '0' * 64, :type => :iphone) }
 
   let(:ssl_context)      { double(OpenSSL::SSL::SSLContext).as_null_object }
   let(:x509_certificate) { double(OpenSSL::X509::Certificate).as_null_object }
@@ -84,7 +84,7 @@ describe Pling::APN::Gateway do
     end
 
     it 'should try to deliver the given message' do
-      expected_header  = "\x00\x00 \xDE\xF2\xCE-\xE7\xD2\xF2\xEB\x00$"
+      expected_header  = "\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00$"
       expected_payload = {
         'aps' => {
           'alert' => 'Hello from Pling'
@@ -92,7 +92,7 @@ describe Pling::APN::Gateway do
       }
 
       ssl_socket.stub(:write) do |packet|
-        header, payload = packet[0..12], packet[13..-1]
+        header, payload = packet[0..20], packet[21..-1]
         header.should eq(expected_header)
         JSON.parse(payload).should eq(expected_payload)
       end
@@ -109,7 +109,7 @@ describe Pling::APN::Gateway do
       }
 
       ssl_socket.stub(:write) do |packet|
-        JSON.parse(packet[13..-1]).should eq(expected_payload)
+        JSON.parse(packet[21..-1]).should eq(expected_payload)
       end
 
       message.badge = 10
@@ -126,7 +126,7 @@ describe Pling::APN::Gateway do
       }
 
       ssl_socket.stub(:write) do |packet|
-        JSON.parse(packet[13..-1]).should eq(expected_payload)
+        JSON.parse(packet[21..-1]).should eq(expected_payload)
       end
 
       message.sound = :pling
@@ -149,7 +149,7 @@ describe Pling::APN::Gateway do
         }
 
         ssl_socket.stub(:write) do |packet|
-          JSON.parse(packet[13..-1]).should eq(expected_payload)
+          JSON.parse(packet[21..-1]).should eq(expected_payload)
         end
 
         subject.deliver(message, device)
@@ -170,7 +170,7 @@ describe Pling::APN::Gateway do
         }
 
         ssl_socket.stub(:write) do |packet|
-          JSON.parse(packet[13..-1]).should eq(expected_payload)
+          JSON.parse(packet[21..-1]).should eq(expected_payload)
         end
 
         subject.deliver(message, device)

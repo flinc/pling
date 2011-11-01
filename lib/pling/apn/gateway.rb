@@ -39,8 +39,6 @@ module Pling
       # @param [#to_pling_message] message
       # @param [#to_pling_device] device
       def deliver!(message, device)
-        token = [device.identifier].pack('H*')
-
         data = {
           :aps => {
             :alert => message.body,
@@ -60,7 +58,7 @@ module Pling
                 device)
         end
 
-        connection.write([0, 0, 32, token, 0, data.bytesize, data].pack('ccca*cca*'))
+        connection.write([0, 32, device.identifier, data.bytesize, data].pack('cnH32na*'))
       end
 
       private
