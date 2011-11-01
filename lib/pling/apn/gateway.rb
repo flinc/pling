@@ -58,7 +58,9 @@ module Pling
           device)
         end
 
-        connection.write([0, 32, device.identifier, data.bytesize, data].pack('cnH32na*'))
+        token = [device.identifier].pack('H*')
+
+        connection.write([0, token.bytesize, token, data.bytesize, data].pack('cna*na*'))
       end
 
       private

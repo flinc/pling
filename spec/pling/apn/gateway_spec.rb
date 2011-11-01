@@ -45,7 +45,7 @@ describe Pling::APN::Gateway do
     end
 
     it 'should try to deliver the given message' do
-      expected_header  = "\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00$"
+      expected_header  = "\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00$"
       expected_payload = {
         'aps' => {
           'alert' => 'Hello from Pling'
@@ -53,7 +53,7 @@ describe Pling::APN::Gateway do
       }
 
       connection.stub(:write) do |packet|
-        header, payload = packet[0..20], packet[21..-1]
+        header, payload = packet[0..36], packet[37..-1]
         header.should eq(expected_header)
         JSON.parse(payload).should eq(expected_payload)
       end
@@ -70,7 +70,7 @@ describe Pling::APN::Gateway do
       }
 
       connection.stub(:write) do |packet|
-        JSON.parse(packet[21..-1]).should eq(expected_payload)
+        JSON.parse(packet[37..-1]).should eq(expected_payload)
       end
 
       message.badge = 10
@@ -87,7 +87,7 @@ describe Pling::APN::Gateway do
       }
 
       connection.stub(:write) do |packet|
-        JSON.parse(packet[21..-1]).should eq(expected_payload)
+        JSON.parse(packet[37..-1]).should eq(expected_payload)
       end
 
       message.sound = :pling
@@ -110,7 +110,7 @@ describe Pling::APN::Gateway do
         }
 
         connection.stub(:write) do |packet|
-          JSON.parse(packet[21..-1]).should eq(expected_payload)
+          JSON.parse(packet[37..-1]).should eq(expected_payload)
         end
 
         subject.deliver(message, device)
@@ -131,7 +131,7 @@ describe Pling::APN::Gateway do
         }
 
         connection.stub(:write) do |packet|
-          JSON.parse(packet[21..-1]).should eq(expected_payload)
+          JSON.parse(packet[37..-1]).should eq(expected_payload)
         end
 
         subject.deliver(message, device)
