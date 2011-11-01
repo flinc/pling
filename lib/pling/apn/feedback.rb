@@ -11,7 +11,7 @@ module Pling
         tokens = []
         while line = connection.gets
           time, length = line.unpack("Nn")
-          tokens << line.unpack("x6H#{length * 2}").first
+          tokens << line.unpack("x6H#{length << 1}").first
         end
         tokens
       end
@@ -29,8 +29,7 @@ module Pling
         def default_configuration
           super.merge(
             :host => 'feedback.push.apple.com',
-            :port => 2195,
-            :payload => false
+            :port => 2195
           )
         end
 
