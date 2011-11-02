@@ -77,8 +77,8 @@ The Gateway delivers the message in the required format to the service provider.
 
 Currently there are these gateways available:
 
-* [Android C2DM](http://rdoc.info/github/flinc/pling/master/Pling/Gateway/C2DM)
-* [Apple Push Notification](http://rdoc.info/github/flinc/pling/master/Pling/Gateway/APN)
+* [Android C2DM](http://rdoc.info/github/flinc/pling/master/Pling/C2DM/Gateway)
+* [Apple Push Notification](http://rdoc.info/github/flinc/pling/master/Pling/APN/Gateway)
 * [SMS via Mobilant](https://github.com/flinc/pling-mobilant) (See `pling-mobilant` gem)
 * [Email](https://github.com/flinc/pling-actionmailer) (See `pling-actionmailer` gem)
 

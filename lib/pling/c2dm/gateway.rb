@@ -8,7 +8,7 @@ module Pling
     # The gateway is implemented using Faraday. It defaults to Faraday's :net_http adapter.
     # You can customize the adapter by passing the :adapter configuration.
     #
-    # Example:
+    # @example
     #
     #   Pling::C2DM::Gateway.new({
     #     :email    => 'your-email@gmail.com', # Your google account's email address (Required)

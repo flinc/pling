@@ -1,4 +1,9 @@
 module Pling
+  ##
+  # This module adds support for Google's Cloud to Device Messaging (C2DM) to pling.
+  # Please refer to {Pling::C2DM::Gateway} for documentation.
+  #
+  # @see Pling::C2DM::Gateway
   module C2DM
     autoload :Gateway, 'pling/c2dm/gateway'
 
