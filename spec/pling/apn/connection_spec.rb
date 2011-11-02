@@ -84,4 +84,28 @@ describe Pling::APN::Connection do
 
   end
 
+  describe "#gets" do
+    subject do
+      Pling::APN::Connection.new(configuration)
+    end
+
+    it "should simply pass on the data" do
+      data = 'Pass this through!'
+      ssl_socket.should_receive(:gets).and_return(data)
+      subject.gets.should eq(data)
+    end
+  end
+
+  describe "#read" do
+    subject do
+      Pling::APN::Connection.new(configuration)
+    end
+
+    it "should simply pass on the data" do
+      data = 'Pass this through!'
+      ssl_socket.should_receive(:read).and_return(data)
+      subject.read.should eq(data)
+    end
+  end
+
 end

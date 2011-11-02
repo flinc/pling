@@ -52,7 +52,7 @@ module Pling
       end
       
       def gets(*args, &block)
-        @ssel_socket.gets(*args, &block)
+        @ssl_socket.gets(*args, &block)
       end
 
       protected
