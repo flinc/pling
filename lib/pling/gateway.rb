@@ -28,6 +28,7 @@ module Pling
     end
 
     def handles?(device)
+      device  = Pling._convert(device,  :device)
       self.class.handled_types.include?(device.type)
     end
 

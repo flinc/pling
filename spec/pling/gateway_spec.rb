@@ -33,7 +33,7 @@ describe Pling::Gateway do
     end
 
     it 'should call #to_pling_device on the given argument' do
-      device.should_receive(:to_pling_device).and_return(device)
+      device.should_receive(:to_pling_device).at_least(1).times.and_return(device)
       subject.discover(device)
     end
 
