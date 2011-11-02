@@ -41,7 +41,7 @@ After configuring Pling you can send messages to devices by like this:
     device  = Pling::Device.new(:identifier => 'XXXXXXXXXX...XXXXXX', :type => :iphone)
     device.deliver(message)
 
-    # ... or call Pling.delver
+    # ... or call Pling.deliver
     Pling.deliver(message, device)
 
 Pling has three core components:
