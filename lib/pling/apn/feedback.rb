@@ -41,7 +41,7 @@ module Pling
       #
       # @example
       #
-      #   Pling::APN::Gateway.new(
+      #   Pling::APN::Feedback.new(
       #     :certificate => '/path/to/certificate.pem',
       #     :host => 'feedback.push.apple.com',
       #     :port => 2196
