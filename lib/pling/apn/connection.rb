@@ -41,9 +41,18 @@ module Pling
         raise IOError, "Connection closed" if closed?
         @ssl_socket.write(*args, &block)
       end
+      
+      def puts(*args, &block)
+        raise IOError, "Connection closed" if closed?
+        @ssl_socket.write(*args, &block)
+      end
 
-      def read
-        @ssl_socket.read
+      def read(*args, &block)
+        @ssl_socket.read(*args, &block)
+      end
+      
+      def gets(*args, &block)
+        @ssel_socket.gets(*args, &block)
       end
 
       protected
