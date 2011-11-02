@@ -2,6 +2,7 @@
 
 Pling is a notification framework that supports multiple gateways. This gem implements the basic framework as well as a gateway to Google's Cloud to Device Messaging Service (C2DM) and Apple's Push Notification Service (APN).
 
+See the [API Documentation](http://rubydoc.info/github/flinc/pling/master/file/README.md) for more in depth documentation.
 
 ## Requirements
 
@@ -82,7 +83,7 @@ Currently there are these gateways available:
 * [SMS via Mobilant](https://github.com/flinc/pling-mobilant) (See `pling-mobilant` gem)
 * [Email](https://github.com/flinc/pling-actionmailer) (See `pling-actionmailer` gem)
 
-See the [API documentation](http://rdoc.info/github/flinc/pling) for details on the available gateways.
+See the [API documentation](http://rubydoc.info/github/flinc/pling/master/file/README.md) for details on the available gateways.
 
 
 ### Middleware
