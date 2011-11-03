@@ -11,10 +11,8 @@ module Pling
       end
 
       def open
-        @ssl_socket ||= OpenSSL::SSL::SSLSocket.new(tcp_socket, ssl_context).tap do |socket|
-          socket.sync = true
-          socket.connect
-        end
+        ssl_socket.sync = true
+        ssl_socket.connect
 
         self
       end
@@ -24,35 +22,42 @@ module Pling
       end
 
       def close
-        if open?
-          @ssl_socket.close
-          @ssl_socket = nil
-          @tcp_socket = nil
-        end
+        ssl_socket.close rescue true
+        tcp_socket.close rescue true
 
         self
       end
 
       def closed?
-        !@ssl_socket or @ssl_socket.closed?
+        ssl_socket.closed?
       end
 
       def write(*args, &block)
         raise IOError, "Connection closed" if closed?
-        @ssl_socket.write(*args, &block)
+        with_retries do
+          ssl_socket.write(*args, &block)
+        end
       end
       
       def puts(*args, &block)
         raise IOError, "Connection closed" if closed?
-        @ssl_socket.write(*args, &block)
+        with_retries do
+          ssl_socket.puts(*args, &block)
+        end
       end
 
       def read(*args, &block)
-        @ssl_socket.read(*args, &block)
+        raise IOError, "Connection closed" if closed?
+        with_retries do
+          ssl_socket.read(*args, &block)
+        end
       end
       
       def gets(*args, &block)
-        @ssl_socket.gets(*args, &block)
+        raise IOError, "Connection closed" if closed?
+        with_retries do
+          ssl_socket.gets(*args, &block)
+        end
       end
 
       protected
@@ -70,6 +75,10 @@ module Pling
           @tcp_socket ||= TCPSocket.new(configuration[:host], configuration[:port])
         end
 
+        def ssl_socket
+          @ssl_socket ||= OpenSSL::SSL::SSLSocket.new(tcp_socket, ssl_context)
+        end
+
       private
 
         def default_configuration
@@ -79,6 +88,15 @@ module Pling
           )
         end
 
+        def with_retries(count = 3)
+          yield
+        rescue OpenSSL::SSL::SSLError, Errno::EPIPE, Errno::ENETDOWN
+          if (count -= 1) > 0
+            close; open; retry
+          else
+            raise IOError, $!.message
+          end
+        end
     end
   end
 end

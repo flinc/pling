@@ -78,8 +78,21 @@ describe Pling::APN::Connection do
     end
     
     it "should raise an exception it is closed" do
+      ssl_socket.stub(:closed? => true)
       subject.close
       expect { subject.write("Waahhhh!") }.to raise_error(IOError, "Connection closed")
+    end
+
+    it "should retry three times on Errno::EPIPE" do
+      ssl_socket.should_receive(:write).exactly(3).times.and_raise(Errno::EPIPE)
+      expect { subject.write("Whoops!") }.to raise_error(IOError)
+    end
+
+    it 'should reconnect between retries' do
+      ssl_socket.stub(:write).and_raise(Errno::EPIPE)
+      ssl_socket.should_receive(:connect).exactly(3).times
+      ssl_socket.should_receive(:close).exactly(2).times
+      expect { subject.write("Whoops!") }.to raise_error(IOError)
     end
 
   end
