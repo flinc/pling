@@ -22,6 +22,8 @@ module Pling
     #   })
     class Gateway < Pling::Gateway
 
+      handles :android, :c2dm
+
       attr_reader :token
 
       ##
