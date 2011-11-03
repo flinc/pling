@@ -28,6 +28,10 @@ describe Pling::C2DM::Gateway do
 
   before { Faraday.stub(:new).and_return(connection_mock) }
 
+  it 'should handle various apn related device types' do
+    Pling::C2DM::Gateway.handled_types.should =~ [:android, :c2dm]
+  end
+
   context 'when created with an invalid configuration' do
     [:email, :password, :source].each do |attribute|
       it "should raise an error when :#{attribute} is missing" do
