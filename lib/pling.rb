@@ -1,4 +1,5 @@
-require "pling/version"
+require 'pling/version'
+require 'logger'
 
 module Pling
 
@@ -15,6 +16,7 @@ module Pling
   @gateways = Pling::DelayedInitializer.new
   @middlewares = Pling::DelayedInitializer.new
   @adapter = Pling::Adapter::Base.new
+  @logger = Logger.new(nil)
 
   class Error < StandardError; end
   class AuthenticationFailed < Error; end
@@ -59,6 +61,12 @@ module Pling
     attr_accessor :adapter
 
     ##
+    # Stores the logger. Defaults to Logger.new(nil)
+    #
+    # @return [Logger]
+    attr_accessor :logger
+
+    ##
     # Allows configuration of Pling by passing a config object to the given block
     #
     # @yield [config]
@@ -77,6 +85,8 @@ module Pling
     def deliver(message, device, stack = nil)
       message = Pling._convert(message, :message)
       device  = Pling._convert(device, :device)
+
+      Pling.logger.info "#{self.class} -- Delivering #{message.inspect} to #{device.inspect}"
 
       stack ||= middlewares.initialize! + [adapter]
 

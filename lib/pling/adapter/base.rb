@@ -8,6 +8,8 @@ module Pling
       end
 
       def deliver(message, device)
+        Pling.logger.info "#{self.class} -- Delivering #{message.inspect} to #{device.inspect}"
+
         gateway = Pling::Gateway.discover(device)
         gateway.deliver(message, device)
       end

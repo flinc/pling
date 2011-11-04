@@ -11,6 +11,7 @@ module Pling
       end
 
       def open
+        Pling.logger.info "#{self.class} -- Opening connection in #{Process.pid}"
         ssl_socket.sync = true
         ssl_socket.connect
 
@@ -22,6 +23,7 @@ module Pling
       end
 
       def close
+        Pling.logger.info "#{self.class} -- Closing connection in #{Process.pid}"
         ssl_socket.close rescue true
         tcp_socket.close rescue true
 
@@ -92,6 +94,7 @@ module Pling
           yield
         rescue OpenSSL::SSL::SSLError, Errno::EPIPE, Errno::ENETDOWN
           if (count -= 1) > 0
+            Pling.logger.info "#{self.class} -- #{$!.message} -- Reopening connection in #{Process.pid}"
             close; open; retry
           else
             raise IOError, $!.message
