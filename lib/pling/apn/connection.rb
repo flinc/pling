@@ -94,7 +94,7 @@ module Pling
 
         def with_retries(count = 3)
           yield
-        rescue OpenSSL::SSL::SSLError, Errno::EPIPE, Errno::ENETDOWN, IOError
+        rescue OpenSSL::SSL::SSLError, SocketError, SystemCallError, IOError
           if (count -= 1) > 0
             Pling.logger.info "#{self.class} -- #{$!.message} -- Reopening connection in #{Process.pid}"
             close; open; retry
