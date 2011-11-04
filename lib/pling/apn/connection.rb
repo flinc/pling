@@ -37,29 +37,29 @@ module Pling
       end
 
       def write(*args, &block)
-        raise IOError, "Connection closed" if closed?
         with_retries do
+          raise IOError, "Connection closed" if closed?
           ssl_socket.write(*args, &block)
         end
       end
       
       def puts(*args, &block)
-        raise IOError, "Connection closed" if closed?
         with_retries do
+          raise IOError, "Connection closed" if closed?
           ssl_socket.puts(*args, &block)
         end
       end
 
       def read(*args, &block)
-        raise IOError, "Connection closed" if closed?
         with_retries do
+          raise IOError, "Connection closed" if closed?
           ssl_socket.read(*args, &block)
         end
       end
       
       def gets(*args, &block)
-        raise IOError, "Connection closed" if closed?
         with_retries do
+          raise IOError, "Connection closed" if closed?
           ssl_socket.gets(*args, &block)
         end
       end
@@ -94,7 +94,7 @@ module Pling
 
         def with_retries(count = 3)
           yield
-        rescue OpenSSL::SSL::SSLError, Errno::EPIPE, Errno::ENETDOWN
+        rescue OpenSSL::SSL::SSLError, Errno::EPIPE, Errno::ENETDOWN, IOError
           if (count -= 1) > 0
             Pling.logger.info "#{self.class} -- #{$!.message} -- Reopening connection in #{Process.pid}"
             close; open; retry
