@@ -30,7 +30,16 @@ module Pling
       def initialize(configuration)
         super
         require_configuration(:certificate)
-        connection
+        setup!
+      end
+
+      ## 
+      # Establishes a new connection if connection is not available or closed
+      def setup!
+        if connection.closed?
+          @connection = nil
+          connection
+        end
       end
 
       ##

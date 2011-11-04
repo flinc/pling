@@ -56,7 +56,7 @@ module Pling
     end
 
     ##
-    # Initializes a new Gateway instance
+    # Initializes a new Gateway instance.
     #
     # @param [Hash] config Configuration for this gateway instance
     # @option config [Array] :middlewares List of middlewares to execute before delivering
@@ -66,6 +66,16 @@ module Pling
       middlewares = configuration[:middlewares]
       configuration.merge!(:middlewares => Pling::DelayedInitializer.new)
       middlewares.each { |middleware| configuration[:middlewares] << middleware } if middlewares
+    end
+
+    ##
+    # Sets up this gateway
+    def setup!
+    end
+
+    ##
+    # Tears down this gateway
+    def teardown!
     end
 
     ##

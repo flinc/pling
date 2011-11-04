@@ -41,7 +41,11 @@ module Pling
       def initialize(configuration)
         super
         require_configuration([:email, :password, :source])
-        authenticate!
+        setup!
+      end
+
+      def setup!
+        authenticate! unless token
       end
 
       ##
