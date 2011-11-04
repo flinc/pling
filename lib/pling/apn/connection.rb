@@ -27,6 +27,8 @@ module Pling
         ssl_socket.close rescue true
         tcp_socket.close rescue true
 
+        @ssl_socket = @tcp_socket = nil
+
         self
       end
 
