@@ -36,10 +36,7 @@ module Pling
       ## 
       # Establishes a new connection if connection is not available or closed
       def setup!
-        if connection.closed?
-          @connection = nil
-          connection
-        end
+        connection.reopen if connection.closed?
       end
 
       ##

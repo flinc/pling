@@ -12,10 +12,14 @@ module Pling
 
       def open
         Pling.logger.info "#{self.class} -- Opening connection in #{Process.pid}"
-        ssl_socket.sync = true
         ssl_socket.connect
 
         self
+      end
+
+      def reopen
+        close
+        open
       end
 
       def open?
@@ -33,7 +37,11 @@ module Pling
       end
 
       def closed?
-        ssl_socket.closed?
+        return true if ssl_socket.closed?
+        ssl_socket.read_nonblock(1)
+        return false
+      rescue Exception => e
+        return !e.message.match(/read would block/)
       end
 
       def write(*args, &block)
@@ -76,11 +84,16 @@ module Pling
         end
 
         def tcp_socket
-          @tcp_socket ||= TCPSocket.new(configuration[:host], configuration[:port])
+          @tcp_socket ||= TCPSocket.new(configuration[:host], configuration[:port]).tap do |tcp_socket|
+            tcp_socket.setsockopt(Socket::SOL_SOCKET,  Socket::SO_KEEPALIVE, true)
+            tcp_socket.setsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY,  true)
+          end
         end
 
         def ssl_socket
-          @ssl_socket ||= OpenSSL::SSL::SSLSocket.new(tcp_socket, ssl_context)
+          @ssl_socket ||= OpenSSL::SSL::SSLSocket.new(tcp_socket, ssl_context) do |ssl_socket|
+            ssl_socket.sync = true
+          end
         end
 
       private
@@ -96,8 +109,8 @@ module Pling
           yield
         rescue OpenSSL::SSL::SSLError, SocketError, SystemCallError, IOError
           if (count -= 1) > 0
-            Pling.logger.info "#{self.class} -- #{$!.message} -- Reopening connection in #{Process.pid}"
-            close; open; retry
+            Pling.logger.info "#{self.class} -- #{$!.message}"
+            reopen; retry
           else
             raise IOError, $!.message
           end
