@@ -38,7 +38,9 @@ module Pling
 
       def closed?
         return true if ssl_socket.closed?
-        ssl_socket.read_nonblock(1)
+        tcp_socket.read_nonblock(1)
+        return false
+      rescue Errno::EAGAIN
         return false
       rescue Exception => e
         return !e.message.match(/read would block/)
