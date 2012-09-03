@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency "faraday", "~> 0.7"
+  s.add_runtime_dependency "faraday_middleware", "~> 0.8"
   s.add_runtime_dependency "json", "~> 1.4"
   s.add_runtime_dependency("jruby-openssl") if RUBY_PLATFORM == 'java'
 

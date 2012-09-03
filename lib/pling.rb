@@ -8,6 +8,7 @@ module Pling
   autoload :Gateway,      'pling/gateway'
   autoload :APN,          'pling/apn'
   autoload :C2DM,         'pling/c2dm'
+  autoload :GCM,          'pling/gcm'
   autoload :Middleware,   'pling/middleware'
   autoload :Adapter,      'pling/adapter'
   autoload :Configurable, 'pling/configurable'
