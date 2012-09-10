@@ -72,7 +72,7 @@ describe Pling::GCM::Gateway do
       {
         :registration_ids => [device.identifier],
         :data => { :body => message.body },
-        :collapse_key => message.body.hash
+        :collapse_key => "collapse-#{message.body.hash}"
       }
     end
 
