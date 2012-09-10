@@ -51,7 +51,7 @@ module Pling
             :sound => message.sound,
             :subject => message.subject
           }.delete_if { |_, value| value.nil? },
-          :collapse_key => message.body.hash
+          :collapse_key => "collapse-#{message.body.hash}"
         }
 
         data[:data].merge!(message.payload) if configuration[:payload] && message.payload
