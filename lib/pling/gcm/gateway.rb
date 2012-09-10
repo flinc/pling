@@ -77,7 +77,7 @@ module Pling
       def connection
         @connection ||= Faraday.new(configuration[:connection]) do |builder|
           builder.use FaradayMiddleware::EncodeJson
-          builder.use FaradayMiddleware::ParseJson
+          builder.use FaradayMiddleware::ParseJson, :content_type => /\bjson$/
           builder.use Faraday::Response::Logger if configuration[:debug]
           builder.adapter(configuration[:adapter])
         end
