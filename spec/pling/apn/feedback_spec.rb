@@ -38,6 +38,12 @@ describe Pling::APN::Feedback do
       
       tokens.should be == [token_0, token_1]
     end
+
+    it "closes the connection after receiving all tokens" do
+      connection.should_receive(:close)
+
+      subject.get
+    end
     
   end
 
