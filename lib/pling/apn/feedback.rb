@@ -25,14 +25,14 @@ module Pling
       
       ##
       # Creates a new instance of this class and establishes a connection to
-      # Apple's Push Notification Service.
+      # Apple's Push Notification Service, retrieves a list of invalid device
+      # identifiers and then closes the connection, since Apple closes it on
+      # their side.
       # 
-      # The connection is only established once since Apple will ban you if
-      # you reconnect each time you want to retrieve the list of invalid
-      # device identifiers. For testing purposes, you should use Apple's
-      # sandbox feedback service +feedback.sandbox.push.apple.com+. In order
-      # to do this, you have to specify the optional +:host+ parameter when
-      # creating instances of this class.
+      # For testing purposes, you should use Apple's sandbox feedback service
+      # +feedback.sandbox.push.apple.com+. In order to do this, you have to
+      # specify the optional +:host+ parameter when creating instances of this
+      # class.
       #
       # @param [Hash] configuration Parameters to control the connection configuration
       # @option configuration [#to_s] :certificate Path to PEM certificate file (Required)
@@ -63,6 +63,7 @@ module Pling
           time, length = line.unpack("Nn")
           tokens << line.unpack("x6H#{length << 1}").first
         end
+        connection.close
         tokens
       end
 
