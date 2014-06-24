@@ -34,6 +34,7 @@ module Pling
       def initialize(configuration)
         super
         require_configuration([:key])
+        Thread.current[:gcm_connection] = nil
       end
 
       ##
@@ -75,7 +76,7 @@ module Pling
       end
 
       def connection
-        @connection ||= Faraday.new(configuration[:connection]) do |builder|
+        Thread.current[:gcm_connection] ||= Faraday.new(configuration[:connection]) do |builder|
           builder.use FaradayMiddleware::EncodeJson
           builder.use FaradayMiddleware::ParseJson, :content_type => /\bjson$/
           builder.use Faraday::Response::Logger if configuration[:debug]
