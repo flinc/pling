@@ -45,7 +45,6 @@ module Pling
       end
 
       def setup!
-        Thread.current[:c2dm_connection] = nil
         authenticate! unless token
       end
 
@@ -105,7 +104,7 @@ module Pling
         end
 
         def connection
-          Thread.current[:c2dm_connection] ||= Faraday.new(configuration[:connection]) do |builder|
+          Faraday.new(configuration[:connection]) do |builder|
             builder.use Faraday::Request::UrlEncoded
             builder.use Faraday::Response::Logger if configuration[:debug]
             builder.adapter(configuration[:adapter])
