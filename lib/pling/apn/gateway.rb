@@ -1,6 +1,7 @@
 require 'socket'
 require 'openssl'
 require 'json'
+require 'connection_pool'
 
 module Pling
   module APN
@@ -33,10 +34,10 @@ module Pling
         setup!
       end
 
-      ## 
+      ##
       # Establishes a new connection if connection is not available or closed
       def setup!
-        connection.reopen if connection.closed?
+        setup_connection_pool
       end
 
       ##
@@ -75,18 +76,33 @@ module Pling
           super.merge(
             :host => 'gateway.push.apple.com',
             :port => 2195,
-            :payload => false
+            :payload => false,
+            :pool_size => 3,
+            :timeout => 5
           )
         end
 
         def connection
-          @connection ||= Connection.new(
+          @connection
+        end
+
+        def setup_connection_pool
+          @connection ||= connection_pool
+        end
+
+        def new_connection
+          Connection.new(
             :host        => configuration[:host],
             :port        => configuration[:port],
             :certificate => configuration[:certificate]
           )
         end
 
+        def connection_pool
+          ConnectionPool::Wrapper.new(size: configuration[:pool_size], timeout: configuration[:timeout]) do
+            new_connection
+          end
+        end
     end
   end
 end

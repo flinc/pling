@@ -18,6 +18,21 @@ describe Pling::APN::Gateway do
     Pling::APN::Gateway.handled_types.should =~ [:apple, :apn, :ios, :ipad, :iphone, :ipod]
   end
 
+  describe '#setup!' do
+    before do
+      valid_configuration.merge!(pool_size: 99, timeout: 55)
+    end
+
+    subject { Pling::APN::Gateway.new(valid_configuration) }
+
+    let(:connection_pool) { double(:connection_pool_double) }
+
+    it 'initializes a new connection pool for the APN connection' do
+      ConnectionPool::Wrapper.should_receive(:new).with(size: 99, timeout: 55).and_return(connection_pool)
+      subject.setup!
+    end
+  end
+
   describe '#deliver' do
     subject { Pling::APN::Gateway.new(valid_configuration) }
 
@@ -27,6 +42,14 @@ describe Pling::APN::Gateway do
 
     it 'should raise an error the device is given' do
       expect { subject.deliver(message, nil) }.to raise_error
+    end
+
+    it 'should initialize a new APN connection if none is established' do
+      Pling::APN::Connection.should_receive(:new).and_return(connection)
+      subject.deliver(message, device)
+
+      Pling::APN::Connection.should_not_receive(:new)
+      subject.deliver(message, device)
     end
 
     it 'should call #to_pling_message on the given message' do
