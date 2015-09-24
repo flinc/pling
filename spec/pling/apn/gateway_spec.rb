@@ -62,9 +62,9 @@ describe Pling::APN::Gateway do
       subject.deliver(message, device)
     end
 
-    it 'should raise an exception when the payload exceeds 256 bytes' do
-      message.body = "X" * 256
-      expect { subject.deliver(message, device) }.to raise_error(Pling::DeliveryFailed, /Payload size of \d+ exceeds allowed size of 256 bytes/)
+    it 'should raise an exception when the payload exceeds 2048 bytes' do
+      message.body = "X" * 3000
+      expect { subject.deliver(message, device) }.to raise_error(Pling::DeliveryFailed, /Payload size of \d+ exceeds allowed size of 2048 bytes/)
     end
 
     it 'should try to deliver the given message' do
