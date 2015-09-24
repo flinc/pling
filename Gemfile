@@ -6,5 +6,4 @@ gemspec
 gem 'guard'
 gem 'guard-rspec'
 gem 'guard-yard', :platform => :ruby_19
-gem 'growl_notify' if RUBY_PLATFORM =~ /darwin/
 gem 'rdiscount', ">= 1.6.8", :platform => :ruby
