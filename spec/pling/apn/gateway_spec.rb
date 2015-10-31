@@ -118,6 +118,23 @@ describe Pling::APN::Gateway do
       subject.deliver(message, device)
     end
 
+    it 'should include the given content_available flag' do
+      expected_payload = {
+        'aps' => {
+          'alert' => 'Hello from Pling',
+          'content-available' => 1
+        }
+      }
+
+      connection.stub(:write) do |packet|
+        JSON.parse(packet[37..-1]).should eq(expected_payload)
+      end
+
+      message.content_available = 1
+
+      subject.deliver(message, device)
+    end
+
     context 'when configured to include payload' do
       before do
         valid_configuration.merge!(:payload => true)

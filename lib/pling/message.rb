@@ -66,6 +66,18 @@ module Pling
     end
 
     ##
+    # The content_available property - not supported by all gateways
+    #
+    # @overload content_available
+    # @overload content_available=()
+    attr_reader :content_available
+
+    def content_available=(content_available)
+      content_available &&= !!content_available
+      @content_available = content_available
+    end
+
+    ##
     # Creates a new Pling::Message instance with the given body
     #
     # @overload initialize(body)
