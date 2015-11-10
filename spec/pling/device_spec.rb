@@ -41,7 +41,7 @@ describe Pling::Device do
 
   describe '#identifier=' do
     it 'should call #to_s on the given identifier' do
-      subject.identifier = stub(:to_s => 'XXXX')
+      subject.identifier = double(:identifier_double, :to_s => 'XXXX')
       subject.identifier.should eq('XXXX')
     end
   end

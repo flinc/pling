@@ -65,7 +65,7 @@ describe Pling::Message do
 
   describe '#body=' do
     it 'should call #to_s on the given body' do
-      subject.body = stub(:to_s => 'Hello from Pling')
+      subject.body = double(:body_double, :to_s => 'Hello from Pling')
       subject.body.should eq('Hello from Pling')
     end
   end

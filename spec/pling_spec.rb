@@ -59,7 +59,7 @@ describe Pling do
 
     let(:message) { Pling::Message.new }
     let(:device)  { Pling::Device.new  }
-    let(:adapter) { mock(:deliver => true) }
+    let(:adapter) { double(:adapter_double, :deliver => true) }
 
     before do
       Pling.stub(:adapter).and_return(adapter)

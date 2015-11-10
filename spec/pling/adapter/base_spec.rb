@@ -6,7 +6,7 @@ describe Pling::Adapter::Base do
 
     let(:device)  { Pling::Device.new }
     let(:message) { Pling::Message.new }
-    let(:gateway) { mock(:deliver => true) }
+    let(:gateway) { double(:gateway_double, :deliver => true) }
 
     it 'should try to discover a gateway' do
       Pling::Gateway.should_receive(:discover).with(device).and_return(gateway)
