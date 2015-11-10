@@ -24,7 +24,7 @@ describe Pling::Gateway do
   describe '.discover' do
     it 'should do a delayed initialization' do
       Pling.stub(:gateways).and_return(Pling::DelayedInitializer.new([[gateway_class, { :some => :option }]]))
-      gateway_class.should_receive(:new).with({ :some => :option }).and_return(mock.as_null_object)
+      gateway_class.should_receive(:new).with({ :some => :option }).and_return(double.as_null_object)
       subject.discover(device)
     end
 
@@ -50,15 +50,15 @@ describe Pling::Gateway do
   describe '#handles?' do
     it 'should return true if the gateway supports the given device\'s type' do
       device.type = :android
-      gateway.handles?(device).should be_true
+      gateway.handles?(device).should be true
 
       device.type = :c2dm
-      gateway.handles?(device).should be_true
+      gateway.handles?(device).should be true
     end
 
     it 'should return false if the gateway does not support the given device\'s type' do
       device.type = :random
-      gateway.handles?(device).should be_false
+      gateway.handles?(device).should be false
     end
   end
 
@@ -98,9 +98,9 @@ describe Pling::Gateway do
     end
 
     it 'should not raise an Pling::Errors if an on_exception callback is set' do
-      gateway = gateway_class.new(:on_exception => lambda {})
+      gateway = gateway_class.new(:on_exception => lambda {|_| })
       gateway.stub(:deliver!).and_raise(Pling::Error)
-      expect { gateway.deliver(message, device) }.to_not raise_error Pling::Error
+      expect { gateway.deliver(message, device) }.to_not raise_error
     end
 
     it 'should pass the exception to the callback' do

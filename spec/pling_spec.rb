@@ -59,18 +59,18 @@ describe Pling do
 
     let(:message) { Pling::Message.new }
     let(:device)  { Pling::Device.new  }
-    let(:adapter) { mock(:deliver => true) }
+    let(:adapter) { double(:adapter_double, :deliver => true) }
 
     before do
       Pling.stub(:adapter).and_return(adapter)
     end
 
     it 'should raise an error if no message is given' do
-      expect { Pling.deliver(nil, device) }.to raise_error
+      expect { Pling.deliver(nil, device) }.to raise_error(ArgumentError, /do not implement #to_pling_message/)
     end
 
     it 'should raise an error the device is given' do
-      expect { Pling.deliver(message, nil) }.to raise_error
+      expect { Pling.deliver(message, nil) }.to raise_error(ArgumentError, /do not implement #to_pling_device/)
     end
 
     it 'should call #to_pling_message on the given message' do
