@@ -78,6 +78,18 @@ module Pling
     end
 
     ##
+    # The category property - not supported by all gateways
+    #
+    # @overload category
+    # @overload category=()
+    attr_reader :category
+
+    def category=(category)
+      category &&= category.to_s
+      @category = category
+    end
+
+    ##
     # Creates a new Pling::Message instance with the given body
     #
     # @overload initialize(body)

@@ -135,6 +135,23 @@ describe Pling::APN::Gateway do
       subject.deliver(message, device)
     end
 
+    it 'should include the given category' do
+      expected_payload = {
+        'aps' => {
+          'alert' => 'Hello from Pling',
+          'category' => 'foobar'
+        }
+      }
+
+      connection.stub(:write) do |packet|
+        JSON.parse(packet[37..-1]).should eq(expected_payload)
+      end
+
+      message.category = 'foobar'
+
+      subject.deliver(message, device)
+    end
+
     context 'when configured to include payload' do
       before do
         valid_configuration.merge!(:payload => true)

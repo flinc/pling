@@ -55,6 +55,7 @@ module Pling
         }
 
         data[:aps]['content-available'] = 1 if message.content_available
+        data[:aps]['category'] = message.category if message.category
         data.merge!(message.payload) if configuration[:payload] && message.payload
 
         data = data.to_json
