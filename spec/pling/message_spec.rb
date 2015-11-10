@@ -57,6 +57,22 @@ describe Pling::Message do
     end
   end
 
+  context 'when created with a hash that contains a :category key' do
+    subject { Pling::Message.new(:category => 'foobar')}
+    its(:category) { should eq('foobar') }
+
+    context 'when the value behind the :category key is not a string' do
+      subject { Pling::Message.new(:category => :foobar)}
+
+      its(:category) { should eq('foobar') }
+    end
+
+    context 'when the key is not present' do
+      subject { Pling::Message.new }
+      its(:category) { should eq(nil) }
+    end
+  end
+
   context 'when created with an hash of invalid attributes' do
     it 'should ignore the invalid paramters' do
       expect { Pling::Message.new({ :random_param => true }) }.to_not raise_error
