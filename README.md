@@ -148,4 +148,4 @@ See a list of all contributors on [GitHub](https://github.com/flinc/pling/contri
 
 ## Copyright
 
-Copyright (c) 2010-2011 [flinc AG](https://flinc.org/). See LICENSE for details.
+Copyright (c) 2010-2011 [flinc GmbH](https://flinc.org/). See LICENSE for details.
