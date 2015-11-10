@@ -4,7 +4,7 @@ describe Pling::Device do
 
   context 'when created with no arguments' do
     it 'should not require an argument' do
-      expect { Pling::Device.new }.to_not raise_error ArgumentError
+      expect { Pling::Device.new }.to_not raise_error
     end
 
     specify { Pling::Device.new.should_not be_valid }

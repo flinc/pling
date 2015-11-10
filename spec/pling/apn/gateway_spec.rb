@@ -37,11 +37,11 @@ describe Pling::APN::Gateway do
     subject { Pling::APN::Gateway.new(valid_configuration) }
 
     it 'should raise an error if no message is given' do
-      expect { subject.deliver(nil, device) }.to raise_error
+      expect { subject.deliver(nil, device) }.to raise_error(ArgumentError, /do not implement #to_pling_message/)
     end
 
     it 'should raise an error the device is given' do
-      expect { subject.deliver(message, nil) }.to raise_error
+      expect { subject.deliver(message, nil) }.to raise_error(ArgumentError, /do not implement #to_pling_device/)
     end
 
     it 'should initialize a new APN connection if none is established' do
