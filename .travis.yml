@@ -1,13 +1,7 @@
-before_install:
-  - gem update --system
-  - gem --version
+sudo: false
 language: ruby
 rvm:
   - ruby-head
-  - 1.9.3
+  - 2.2.3
+  - 2.1.7
   - jruby
-  - jruby-19mode
-  - rbx-2
-matrix:
-  allow_failures:
-    - rvm: ruby-head
