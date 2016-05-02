@@ -60,7 +60,9 @@ module Pling
       def get
         tokens = []
         while line = connection.gets
-          time, length = line.unpack("Nn")
+          _, length = line.unpack("Nn")
+          break if length.nil?
+
           tokens << line.unpack("x6H#{length << 1}").first
         end
         connection.close

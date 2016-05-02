@@ -44,7 +44,15 @@ describe Pling::APN::Feedback do
 
       subject.get
     end
-    
-  end
 
+    context 'when the feedback results in no packed data' do
+      before { connection.stub(:gets).and_return('') }
+
+      it 'returns an empty array' do
+        tokens = subject.get
+
+        tokens.should eq([])
+      end
+    end
+  end
 end
